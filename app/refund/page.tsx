@@ -14,7 +14,7 @@ export default function Refund() {
       <h2>After 7 days</h2>
       <p>We can move your teen to another batch or program instead. Refunds after this window are at our discretion.</p>
       <h2>How to ask</h2>
-      <p>Email <a href={`mailto:${site.email}`}>{site.email}</a> or WhatsApp {site.phone} with the parent’s name and phone number used at enrolment. Refunds go back to the original payment method within 7–10 working days.</p>
+      <p>Email <a href={`mailto:${site.email}`}>{site.email}</a> or WhatsApp {site.phone} with the parent’s name and phone number used at enrollment. Refunds go back to the original payment method within 7–10 working days.</p>
     </Policy>
   );
 }

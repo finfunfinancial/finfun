@@ -25,7 +25,7 @@ export default function Parents() {
       >
         <div className="btn-row">
           <Link className="btn btn-blue btn-lg" href="/enrol" data-track="enrol_click">
-            Enrol your teen
+            Enroll your teen
           </Link>
           <Link className="btn btn-white btn-lg" href="#programs">
             See programs & prices
@@ -96,7 +96,7 @@ export default function Parents() {
         </div>
       </section>
 
-      <JoinBanner audience="parents" title="Give your teen a head start" text="Enrol in a few minutes. Pay by UPI, card or netbanking." />
+      <JoinBanner audience="parents" title="Give your teen a head start" text="Enroll in a few minutes. Pay by UPI, card or netbanking." />
     </>
   );
 }

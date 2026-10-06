@@ -36,7 +36,7 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
           {inr(p.price)} <small>per student</small>
         </p>
         <Link className="btn btn-blue btn-lg" href={`/enrol?program=${p.slug}`} data-track="enrol_click">
-          Enrol in {p.name.replace("FinFun ", "")}
+          Enroll in {p.name.replace("FinFun ", "")}
         </Link>
       </PageHero>
 
@@ -54,7 +54,7 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
               </div>
             ))}
           </div>
-          <SectionCta links={[{ label: `Enrol in ${p.name.replace("FinFun ", "")}`, href: `/enrol?program=${p.slug}` }]} />
+          <SectionCta links={[{ label: `Enroll in ${p.name.replace("FinFun ", "")}`, href: `/enrol?program=${p.slug}` }]} />
         </div>
       </section>
 
@@ -66,9 +66,9 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
               {p.format.map((f) => (
                 <li key={f}>{f}</li>
               ))}
-              <li>Batch timings shared at enrolment — choose what fits your teen’s week</li>
+              <li>Batch timings shared at enrollment — choose what fits your teen’s week</li>
             </ul>
-            <SectionCta links={[{ label: "Enrol now", href: `/enrol?program=${p.slug}` }, { label: "Ask a question", href: "/contact", tone: "white" }]} />
+            <SectionCta links={[{ label: "Enroll now", href: `/enrol?program=${p.slug}` }, { label: "Ask a question", href: "/contact", tone: "white" }]} />
           </div>
           <Img className="banner-img" src="/a/about-and-programs/learning-kit-illustration-1200x800.webp" alt="Sample of the FinFun learning kit" sizes="(max-width: 860px) 90vw, 560px" loading="lazy" />
         </div>
@@ -83,7 +83,7 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
           </p>
         </div>
       </section>
-      <JoinBanner audience="parents" title={`Enrol in ${p.name}`} text={`${p.grades} · ${inr(p.price)} · Pay by UPI, card or netbanking.`} />
+      <JoinBanner audience="parents" title={`Enroll in ${p.name}`} text={`${p.grades} · ${inr(p.price)} · Pay by UPI, card or netbanking.`} />
     </>
   );
 }

@@ -65,7 +65,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           </div>
         </div>
       </article>
-      <JoinBanner audience="parents" title="Want your teen to learn this properly?" text="FinFun turns money lessons like this into games and challenges. Enrol in minutes." />
+      <JoinBanner audience="parents" title="Want your teen to learn this properly?" text="FinFun turns money lessons like this into games and challenges. Enroll in minutes." />
     </>
   );
 }

@@ -22,7 +22,7 @@ export default function Footer() {
               <li><Link href="/schools">For Schools</Link></li>
               <li><Link href="/parents">For Parents</Link></li>
               <li><Link href="/programs">Programs</Link></li>
-              <li><Link href="/enrol">Enrol</Link></li>
+              <li><Link href="/enrol">Enroll</Link></li>
             </ul>
           </div>
           <div>

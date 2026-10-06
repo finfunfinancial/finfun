@@ -19,7 +19,7 @@ export default function Privacy() {
         <li><strong>Usage:</strong> anonymous analytics (Google Analytics, Meta Pixel) to understand which pages help visitors.</li>
       </ul>
       <h2>Parental consent</h2>
-      <p>We process a child’s data only with verifiable consent from their parent or guardian, given at enrolment. Parents can withdraw consent at any time.</p>
+      <p>We process a child’s data only with verifiable consent from their parent or guardian, given at enrollment. Parents can withdraw consent at any time.</p>
       <h2>How we use it</h2>
       <p>To run sessions, share batch timings, send receipts and progress updates, and reply to questions. We never sell data, never show third-party ads, and never display children’s names or photos publicly without written parent consent.</p>
       <h2>Your rights</h2>

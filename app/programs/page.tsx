@@ -54,7 +54,7 @@ export default function Programs() {
               </tbody>
             </table>
           </div>
-          <SectionCta links={[{ label: "Enrol in Pro", href: "/enrol?program=pro" }, { label: "Enrol in Advantage", href: "/enrol?program=advantage", tone: "yellow" }]} />
+          <SectionCta links={[{ label: "Enroll in Pro", href: "/enrol?program=pro" }, { label: "Enroll in Advantage", href: "/enrol?program=advantage", tone: "yellow" }]} />
         </div>
       </section>
       <section className="section" aria-labelledby="kit-h">

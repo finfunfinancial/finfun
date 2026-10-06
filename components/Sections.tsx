@@ -24,7 +24,7 @@ export function SectionCta({ links }: { links: CtaLink[] }) {
 export const CTA = {
   partner: { label: "Partner with us", href: "/schools#partner" },
   demo: { label: "Request a demo", href: "/schools#partner" },
-  enrol: { label: "Enrol your teen", href: "/enrol" },
+  enrol: { label: "Enroll your teen", href: "/enrol" },
   programs: { label: "See programs & prices", href: "/programs" },
   impact: { label: "See our full impact", href: "/impact" },
   report: { label: "Get the impact report", href: "/schools#report" },
@@ -119,7 +119,7 @@ export function Classroom({ cta = [CTA.demo, CTA.enrol] }: { cta?: CtaLink[] | n
   );
 }
 
-export function JoinBanner({ title = "Ready to become money smart?", text = "Bring FinFun to your school, or enrol your teen today.", audience = "both" }: { title?: string; text?: string; audience?: "both" | "parents" | "schools" }) {
+export function JoinBanner({ title = "Ready to become money smart?", text = "Bring FinFun to your school, or enroll your teen today.", audience = "both" }: { title?: string; text?: string; audience?: "both" | "parents" | "schools" }) {
   return (
     <section className="section tight cta-band">
       <Dots className="cta-dots" />
@@ -136,7 +136,7 @@ export function JoinBanner({ title = "Ready to become money smart?", text = "Bri
             )}
             {audience !== "schools" && (
               <Link className="btn btn-lg" href={audience === "parents" ? "/enrol" : "/parents"} data-track="enrol_click">
-                {audience === "parents" ? "Enrol now" : "For Parents"}
+                {audience === "parents" ? "Enroll now" : "For Parents"}
               </Link>
             )}
           </div>
@@ -185,7 +185,7 @@ export function ProgramCard({ p, detail = true }: { p: Program; detail?: boolean
         </div>
         <div className="btn-row">
           <Link className="btn btn-blue" href={`/enrol?program=${p.slug}`} data-track="enrol_click">
-            Enrol in {p.name.replace("FinFun ", "")}
+            Enroll in {p.name.replace("FinFun ", "")}
           </Link>
           {detail && (
             <Link className="btn btn-white" href={`/programs/${p.slug}`}>

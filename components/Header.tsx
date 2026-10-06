@@ -30,7 +30,7 @@ export default function Header() {
             Login
           </Link>
           <Link className="btn btn-sm" href="/enrol" data-track="enrol_click">
-            Enrol
+            Enroll
           </Link>
         </div>
       </div>

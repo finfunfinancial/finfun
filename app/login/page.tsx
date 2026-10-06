@@ -15,7 +15,7 @@ export default function Login() {
           ) : (
             <Link className="btn btn-blue btn-lg" href="/coming-soon">Go to my courses</Link>
           )}
-          <Link className="btn btn-white btn-lg" href="/enrol">Enrol instead</Link>
+          <Link className="btn btn-white btn-lg" href="/enrol">Enroll instead</Link>
         </>
       }>
       <p>Parents and students log in to reach purchased courses. Student logins are created by a parent or school — students can’t sign up on their own.</p>
