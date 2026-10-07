@@ -80,7 +80,7 @@ export function Partners({ cta = [CTA.partner] }: { cta?: CtaLink[] | null } = {
   return (
     <section className="section tight bg-white" aria-labelledby="partners-h">
       <div className="wrap">
-        <SectionHead title={<span id="partners-h">Trusted by governments, CSR leaders and schools</span>} />
+        <SectionHead title={<span id="partners-h">Trusted by schools, parents, government and CSR leaders</span>} />
         <ul className="partners" role="list" style={{ listStyle: "none", padding: 0, margin: 0 }}>
           {partners.map((p) => (
             <li className="partner" key={p.name}>
