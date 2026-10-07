@@ -53,7 +53,7 @@ export default function Schools() {
 
       <section className="section bg-white" aria-labelledby="steps-h">
         <div className="wrap">
-          <SectionHead eyebrow="How partnership works" title={<span id="steps-h">Partner → Train → Play → Measure</span>} />
+          <SectionHead eyebrow="How partnership works" title={<span id="steps-h">Partner&nbsp;→ Train&nbsp;→ Play&nbsp;→ Measure</span>} />
           <div className="steps">
             {partnershipSteps.map((s, i) => (
               <div className="card step" key={s.title}>

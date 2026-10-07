@@ -80,7 +80,7 @@ export default function Home() {
 
       <section className="section" aria-labelledby="how-h">
         <div className="wrap">
-          <SectionHead eyebrow="How it works" title={<span id="how-h">Learn → Play → Grow</span>} />
+          <SectionHead eyebrow="How it works" title={<span id="how-h">Learn&nbsp;→ Play&nbsp;→ Grow</span>} />
           <div className="steps">
             {howItWorks.map((s, i) => (
               <div className="card step" key={s.title}>

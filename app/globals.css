@@ -173,16 +173,25 @@ p {
 
 .section-head {
   text-align: center;
-  max-width: 720px;
+  max-width: 880px;
   margin: 0 auto clamp(32px, 5vw, 56px);
+}
+.section-head h2 {
+  text-wrap: balance;
 }
 .section-head p {
   color: var(--muted);
   font-size: 1.1rem;
+  max-width: 720px;
+  margin-inline: auto;
 }
 .left .section-head,
 .section-head.left {
   text-align: left;
+  margin-left: 0;
+}
+.left .section-head p,
+.section-head.left p {
   margin-left: 0;
 }
 
