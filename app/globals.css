@@ -784,6 +784,13 @@ p {
 .slides::-webkit-scrollbar {
   display: none;
 }
+/* auto-scrolling (see Testimonials.tsx): snapping would fight the drift; the duplicate copy only exists for the loop */
+.slides.auto {
+  scroll-snap-type: none;
+}
+.slides:not(.auto) > [aria-hidden] {
+  display: none;
+}
 .quote {
   scroll-snap-align: start;
   display: flex;
