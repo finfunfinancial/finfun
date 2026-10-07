@@ -239,6 +239,9 @@ p {
 .btn-white {
   background: var(--white);
 }
+.btn-festive {
+  background: var(--pink);
+}
 .btn-sm {
   min-height: 42px;
   padding: 8px 18px;

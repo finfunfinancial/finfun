@@ -16,6 +16,11 @@ export const site = {
   financialPassportUrl: process.env.NEXT_PUBLIC_FINANCIAL_PASSPORT_URL ?? "",
 };
 
+// Festive offer button in the homepage hero; it opens Enroll with `code` pre-filled as the coupon.
+// Set `active: false` to hide it after the season.
+// TODO(FinFun): set the real discount (e.g. "20%") and coupon code.
+export const festiveOffer = { active: true, discount: "", code: "FESTIVE" };
+
 export const nav = [
   { href: "/schools", label: "For Schools" },
   { href: "/parents", label: "For Parents" },

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Enroll({ searchParams }: PageProps<"/enrol">) {
-  const { program } = await searchParams;
+  const { program, coupon } = await searchParams;
   return (
     <section className="section doodle bg-yellow">
       <div className="wrap split" style={{ alignItems: "start" }}>
@@ -39,7 +39,7 @@ export default async function Enroll({ searchParams }: PageProps<"/enrol">) {
           <p className="fine mt">Only a parent or guardian can enroll. We collect just your child’s first name and grade, and never share or display it publicly.</p>
         </div>
         <div className="card">
-          <EnrolForm program={typeof program === "string" ? program : undefined} />
+          <EnrolForm program={typeof program === "string" ? program : undefined} coupon={typeof coupon === "string" ? coupon : undefined} />
         </div>
       </div>
     </section>

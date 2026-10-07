@@ -37,7 +37,7 @@ export function ReportForm() {
   );
 }
 
-export function EnrolForm({ program }: { program?: string }) {
+export function EnrolForm({ program, coupon }: { program?: string; coupon?: string }) {
   return (
     <LeadForm
       type="enrol"
@@ -52,7 +52,7 @@ export function EnrolForm({ program }: { program?: string }) {
         { name: "grade", label: "Child’s grade", type: "select", options: ["3", "4", "5", "6", "7", "8", "9", "10"].map((g) => ({ value: g, label: `Grade ${g}` })) },
         { name: "school", label: "School" },
         { name: "city", label: "City", autoComplete: "address-level2" },
-        { name: "coupon", label: "Coupon code", required: false, full: true },
+        { name: "coupon", label: "Coupon code", required: false, full: true, defaultValue: coupon && /^[A-Za-z0-9-]{1,20}$/.test(coupon) ? coupon.toUpperCase() : undefined },
         {
           name: "consent",
           label: "Consent",

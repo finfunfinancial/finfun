@@ -3,7 +3,7 @@ import Img from "@/components/Img";
 import { CTA, Classroom, Comparison, ImpactBand, JoinBanner, JsonLd, Partners, ProgramCard, SectionCta, SectionHead, Spotlight, WaysToJoin } from "@/components/Sections";
 import PostCard from "@/components/PostCard";
 import Testimonials from "@/components/Testimonials";
-import { howItWorks, methods, programs, site, values } from "@/lib/content";
+import { festiveOffer, howItWorks, methods, programs, site, values } from "@/lib/content";
 import { posts } from "@/lib/posts";
 
 export default function Home() {
@@ -23,7 +23,7 @@ export default function Home() {
       <section className="hero doodle">
         <div className="wrap hero-grid">
           <div>
-            <span className="eyebrow">{site.grades} · Ages 11–16</span>
+            <span className="eyebrow">{site.grades} · Ages 8–16</span>
             <h1>
               Money skills for <span className="mark">real life</span>
             </h1>
@@ -35,6 +35,11 @@ export default function Home() {
               <Link className="btn btn-lg" href="/parents" data-track="path_parents">
                 For Parents
               </Link>
+              {festiveOffer.active && (
+                <Link className="btn btn-lg btn-festive" href={`/enrol?coupon=${festiveOffer.code}`} data-track="festive_click">
+                  🎉 Festive offer{festiveOffer.discount && `: ${festiveOffer.discount} off`}
+                </Link>
+              )}
             </div>
             <p className="hero-note">Trusted by 35,000+ schools across India</p>
           </div>
