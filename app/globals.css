@@ -373,6 +373,7 @@ p {
   font-weight: 700;
   padding: 8px 12px;
   border-radius: 999px;
+  white-space: nowrap;
 }
 .nav a:hover,
 .nav a[aria-current="page"] {
@@ -424,7 +425,7 @@ p {
   top: 7px;
 }
 
-@media (max-width: 1020px) {
+@media (max-width: 1080px) {
   .menu-btn {
     display: block;
   }

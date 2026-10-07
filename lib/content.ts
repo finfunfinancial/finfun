@@ -20,6 +20,7 @@ export const nav = [
   { href: "/schools", label: "For Schools" },
   { href: "/parents", label: "For Parents" },
   { href: "/programs", label: "Programs" },
+  { href: "/gifting", label: "Gifting" },
   { href: "/about", label: "About" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
