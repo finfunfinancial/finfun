@@ -366,5 +366,5 @@ export const waysToJoin = [
   { kicker: "Schools", title: "Partner School", who: "For principals & trustees", text: "Run FinFun in grades 6–10 with trained teachers, kits and competitions.", cta: "Book a demo", href: "/schools#partner", color: "sky" },
   { kicker: "CSR & Government", title: "Impact Partner", who: "For CSR heads & education departments", text: "Fund FinFun at scale and get measured outcomes in an impact report.", cta: "Get the report", href: "/schools#report", color: "lavender" },
   { kicker: "Teachers", title: "FinFun Teacher", who: "For teachers in partner schools", text: "Get trained to lead sessions — plus personal finance training for you.", cta: "Ask about training", href: "/contact", color: "green" },
-  { kicker: "Parents", title: "FinFun Family", who: "For parents of grades 3–10", text: "Enroll your child in Basic, Pro or Advantage — live, online, game-based.", cta: "Enroll your teen", href: "/enrol", color: "pink" },
+  { kicker: "Parents", title: "FinFun Family", who: "For parents of grades 3–10", text: "Enroll your child in Basic, Pro or Advantage — live, online, game-based.", cta: "Enroll your child", href: "/enrol", color: "pink" },
 ];

@@ -25,7 +25,7 @@ export default function Parents() {
       >
         <div className="btn-row">
           <Link className="btn btn-blue btn-lg" href="/enrol" data-track="enrol_click">
-            Enroll your teen
+            Enroll your child
           </Link>
           <Link className="btn btn-white btn-lg" href="#programs">
             See programs & prices

@@ -24,7 +24,7 @@ export function SectionCta({ links }: { links: CtaLink[] }) {
 export const CTA = {
   partner: { label: "Partner with us", href: "/schools#partner" },
   demo: { label: "Request a demo", href: "/schools#partner" },
-  enrol: { label: "Enroll your teen", href: "/enrol" },
+  enrol: { label: "Enroll your child", href: "/enrol" },
   programs: { label: "See programs & prices", href: "/programs" },
   impact: { label: "See our full impact", href: "/impact" },
   report: { label: "Get the impact report", href: "/schools#report" },
@@ -119,7 +119,7 @@ export function Classroom({ cta = [CTA.demo, CTA.enrol] }: { cta?: CtaLink[] | n
   );
 }
 
-export function JoinBanner({ title = "Ready to become money smart?", text = "Bring FinFun to your school, or enroll your teen today.", audience = "both" }: { title?: string; text?: string; audience?: "both" | "parents" | "schools" }) {
+export function JoinBanner({ title = "Ready to become money smart?", text = "Bring FinFun to your school, or enroll your child today.", audience = "both" }: { title?: string; text?: string; audience?: "both" | "parents" | "schools" }) {
   return (
     <section className="section tight cta-band">
       <Dots className="cta-dots" />

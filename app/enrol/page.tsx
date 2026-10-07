@@ -6,7 +6,7 @@ import { inr } from "@/components/Sections";
 import { programs } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Enroll your teen",
+  title: "Enroll your child",
   description: "Enroll your child in FinFun Basic (grades 3–5), FinFun Pro (grades 6–7) or FinFun Advantage (grades 8–10). Pay securely by UPI, card or netbanking.",
   alternates: { canonical: "/enrol" },
 };
@@ -18,7 +18,7 @@ export default async function Enroll({ searchParams }: PageProps<"/enrol">) {
       <div className="wrap split" style={{ alignItems: "start" }}>
         <div>
           <span className="eyebrow">Enroll · Step 1 of 2</span>
-          <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)" }}>Enroll your teen</h1>
+          <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)" }}>Enroll your child</h1>
           <p className="muted" style={{ fontSize: "1.15rem" }}>Fill in a few details, then pay securely. It takes about two minutes.</p>
           <div className="stack mt">
             {programs.map((p) => (
