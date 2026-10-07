@@ -7,7 +7,7 @@ import { parentFaq, parentTopics, programs } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Money skills for your teen",
-  description: "Raise a money-smart teen. FinFun teaches grades 6–10 budgeting, saving, UPI and scam safety, SIPs and investing through live, game-based sessions.",
+  description: "Raise a money-smart teen. FinFun teaches grades 3–10 budgeting, saving, UPI and scam safety, SIPs and investing through live, game-based sessions.",
   alternates: { canonical: "/parents" },
 };
 
@@ -16,7 +16,7 @@ export default function Parents() {
     <>
       <JsonLd data={faqJsonLd(parentFaq)} />
       <PageHero
-        eyebrow="For parents of grades 6–10"
+        eyebrow="For parents of grades 3–10"
         title={<>Raise a <span className="mark">money-smart</span> teen</>}
         lead="Your teen already uses UPI and shops online. FinFun teaches them to budget, save, spot scams and start investing — through games they actually look forward to."
         art="/a/sticker/07-family-budget.webp"

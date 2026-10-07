@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: PageProps<"/programs/[slug]">
 export default async function ProgramPage({ params }: PageProps<"/programs/[slug]">) {
   const p = getProgram((await params).slug);
   if (!p) notFound();
-  const other = programs.find((x) => x.slug !== p.slug)!;
+  const others = programs.filter((x) => x.slug !== p.slug);
   return (
     <>
       <JsonLd
@@ -31,7 +31,7 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
         }}
       />
       <JsonLd data={faqJsonLd(parentFaq)} />
-      <PageHero eyebrow={p.grades} title={p.name} lead={p.focus} art={p.sticker} tone={p.slug === "pro" ? "bg-sky" : "bg-yellow"}>
+      <PageHero eyebrow={p.grades} title={p.name} lead={p.focus} art={p.sticker} tone={{ basic: "bg-pink", pro: "bg-sky", advantage: "bg-yellow" }[p.slug]}>
         <p className="price" style={{ marginBottom: 20 }}>
           {inr(p.price)} <small>per student</small>
         </p>
@@ -79,7 +79,14 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
           <SectionHead eyebrow="FAQ" title={<span id="pfaq-h">Good to know</span>} />
           <Faq items={parentFaq} />
           <p className="center mt">
-            Teen in {other.grades.toLowerCase()}? See <Link href={`/programs/${other.slug}`}>{other.name}</Link>.
+            Different grade? See{" "}
+            {others.map((o, i) => (
+              <span key={o.slug}>
+                {i > 0 && " or "}
+                <Link href={`/programs/${o.slug}`}>{o.name}</Link> ({o.grades.toLowerCase()})
+              </span>
+            ))}
+            .
           </p>
         </div>
       </section>

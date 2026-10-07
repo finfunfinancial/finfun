@@ -687,6 +687,9 @@ p {
 .program-top img {
   align-self: end;
 }
+.program-top.basic {
+  background: var(--pink-soft);
+}
 .program-top.pro {
   background: var(--sky-soft);
 }

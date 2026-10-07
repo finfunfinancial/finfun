@@ -49,7 +49,7 @@ export function EnrolForm({ program }: { program?: string }) {
         { name: "email", label: "Parent’s email", type: "email", autoComplete: "email" },
         { name: "phone", label: "Parent’s WhatsApp number", type: "tel", autoComplete: "tel", full: true },
         { name: "childName", label: "Child’s first name" },
-        { name: "grade", label: "Child’s grade", type: "select", options: ["6", "7", "8", "9", "10"].map((g) => ({ value: g, label: `Grade ${g}` })) },
+        { name: "grade", label: "Child’s grade", type: "select", options: ["3", "4", "5", "6", "7", "8", "9", "10"].map((g) => ({ value: g, label: `Grade ${g}` })) },
         { name: "school", label: "School" },
         { name: "city", label: "City", autoComplete: "address-level2" },
         { name: "coupon", label: "Coupon code", required: false, full: true },

@@ -7,7 +7,7 @@ import { programs } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Enroll your teen",
-  description: "Enroll your teen in FinFun Pro (grades 6–7) or FinFun Advantage (grades 8–10). Pay securely by UPI, card or netbanking.",
+  description: "Enroll your child in FinFun Basic (grades 3–5), FinFun Pro (grades 6–7) or FinFun Advantage (grades 8–10). Pay securely by UPI, card or netbanking.",
   alternates: { canonical: "/enrol" },
 };
 

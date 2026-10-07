@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Privacy policy", alternates: { canon
 export default function Privacy() {
   return (
     <Policy title="Privacy policy" updated="30 September 2026">
-      <p>FinFun (“we”) runs financial literacy programs for students in grades 6 to 10. We take children’s privacy seriously and follow India’s Digital Personal Data Protection Act, 2023.</p>
+      <p>FinFun (“we”) runs financial literacy programs for students in grades 3 to 10. We take children’s privacy seriously and follow India’s Digital Personal Data Protection Act, 2023.</p>
       <h2>Who gives us data</h2>
       <p>Only parents, guardians and schools fill in forms or pay on this site. Students never sign up on their own; their accounts are created by a parent or school.</p>
       <h2>What we collect</h2>

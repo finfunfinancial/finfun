@@ -5,7 +5,7 @@ import { site, story, team } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "About FinFun",
-  description: "FinFun is building the future of financial dignity — teaching real money skills to students in grades 6 to 10 across India.",
+  description: "FinFun is building the future of financial dignity — teaching real money skills to students in grades 3 to 10 across India.",
   alternates: { canonical: "/about" },
 };
 
@@ -24,7 +24,7 @@ export default function About() {
           <div>
             <SectionHead left eyebrow="Our mission" title={<span id="why-h">Financial dignity starts in the classroom</span>} />
             <p>Most of us learn about money the hard way — through a scam, a debt or a missed chance to save. FinFun exists so the next generation doesn’t have to.</p>
-            <p>We turn money skills into games, stories and challenges that teens in grades 6 to 10 genuinely enjoy, and we train teachers so every school can run them — government and private, English and vernacular.</p>
+            <p>We turn money skills into games, stories and challenges that kids and teens in grades 3 to 10 genuinely enjoy, and we train teachers so every school can run them — government and private, English and vernacular.</p>
             <SectionCta links={[CTA.programs, CTA.partner]} />
           </div>
           <Img className="sticker" src="/a/sticker/06-super-saver.webp" alt="" sizes="300px" loading="lazy" style={{ maxWidth: 280, justifySelf: "center" }} />

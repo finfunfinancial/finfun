@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="footer-grid">
           <div className="stack">
             <Logo />
-            <p>Gamified money skills for grades 6 to 10. {site.tagline}.</p>
+            <p>Gamified money skills for grades 3 to 10. {site.tagline}.</p>
             <p>
               <a href={`mailto:${site.email}`}>{site.email}</a>
               <br />

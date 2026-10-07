@@ -116,7 +116,7 @@ export default function Home() {
       <section className="section bg-sky" aria-labelledby="programs-h">
         <div className="wrap">
           <SectionHead eyebrow="Programs" title={<span id="programs-h">Pick the right program for your teen</span>}>
-            Two programs, built for how teens think at each stage.
+            Three programs, built for how kids think at each stage.
           </SectionHead>
           <div className="grid g2">
             {programs.map((p) => (

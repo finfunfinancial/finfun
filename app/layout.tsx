@@ -13,9 +13,9 @@ const body = Nunito({ subsets: ["latin"], variable: "--font-body", display: "swa
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: "FinFun — Financial literacy for teens, grades 6 to 10", template: "%s · FinFun" },
+  title: { default: "FinFun — Financial literacy for kids and teens, grades 3 to 10", template: "%s · FinFun" },
   description:
-    "FinFun is a gamified financial literacy program for students in grades 6 to 10. Teens learn budgeting, saving, UPI and scam safety, SIPs and investing through games, quizzes and challenges.",
+    "FinFun is a gamified financial literacy program for students in grades 3 to 10. Kids and teens learn budgeting, saving, UPI and scam safety, SIPs and investing through games, quizzes and challenges.",
   keywords: ["financial literacy for teens", "money skills for students India", "financial literacy program for schools"],
   openGraph: { type: "website", siteName: "FinFun", locale: "en_IN", images: ["/a/about-and-programs/banner-mission-1600x600.webp"] },
   twitter: { card: "summary_large_image" },

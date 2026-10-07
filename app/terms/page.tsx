@@ -10,7 +10,7 @@ export default function Terms() {
     <Policy title="Terms of use" updated="30 September 2026">
       <p>By using finfun.club you agree to these terms.</p>
       <h2>Enrollment</h2>
-      <p>Programs are purchased by a parent or guardian for a student in grades 6 to 10. The purchaser is responsible for the accuracy of the details provided.</p>
+      <p>Programs are purchased by a parent or guardian for a student in grades 3 to 10. The purchaser is responsible for the accuracy of the details provided.</p>
       <h2>Educational content</h2>
       <p>FinFun teaches general money concepts for educational purposes. Nothing on this site or in our sessions is personalised financial or investment advice.</p>
       <h2>Conduct</h2>

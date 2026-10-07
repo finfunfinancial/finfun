@@ -11,7 +11,7 @@ export const site = {
   email: "partnerships@finfun.club",
   phone: "+91 97398 85822",
   whatsapp: "919739885822",
-  grades: "Grades 6 to 10",
+  grades: "Grades 3 to 10",
   loginUrl: process.env.NEXT_PUBLIC_LOGIN_URL ?? "",
   financialPassportUrl: process.env.NEXT_PUBLIC_FINANCIAL_PASSPORT_URL ?? "",
 };
@@ -85,7 +85,7 @@ export const partnershipSteps = [
 ];
 
 export type Program = {
-  slug: "pro" | "advantage";
+  slug: "basic" | "pro" | "advantage";
   name: string;
   grades: string;
   price: number;
@@ -98,6 +98,25 @@ export type Program = {
 
 // TODO(FinFun): confirm grade split, prices, session count and timings.
 export const programs: Program[] = [
+  {
+    slug: "basic",
+    name: "FinFun Basic",
+    grades: "Grades 3–5",
+    price: 999,
+    focus: "Coins and notes, needs vs wants, saving in a gullak, earning and sharing.",
+    sticker: "/a/sticker/04-dadis-gullak.webp",
+    // TODO(FinFun): confirm Basic topics and format.
+    topics: [
+      { title: "Know your money", text: "Coins, notes and what things really cost.", sticker: "/a/sticker/12-money-fun.webp" },
+      { title: "Needs vs wants", text: "Tell what you need from what you just want.", sticker: "/a/sticker/06-need-or-want.webp" },
+      { title: "Save in a gullak", text: "Watch small savings grow into something big.", sticker: "/a/sticker/04-dadis-gullak.webp" },
+      { title: "Set a goal", text: "Pick something to save for and reach it.", sticker: "/a/sticker/04-goal-set.webp" },
+      { title: "Earn it", text: "Learn that money comes from work and effort.", sticker: "/a/sticker/11-earn-it.webp" },
+      { title: "Share and give", text: "Why sharing with others feels good too.", sticker: "/a/sticker/10-share-give.webp" },
+    ],
+    format: ["Weekly live sessions with a FinFun trainer", "Stories, games and play-money activities every session", "Printable activity kit", "Badges and a completion certificate"],
+    checkoutUrl: process.env.NEXT_PUBLIC_CHECKOUT_BASIC ?? "",
+  },
   {
     slug: "pro",
     name: "FinFun Pro",
@@ -258,7 +277,7 @@ export const classroom = [
 ];
 
 export const parentFaq = [
-  { q: "What grades is FinFun for?", a: "FinFun is for students in grades 6 to 10 (about 11 to 16 years old). Pro is for grades 6–7 and Advantage for grades 8–10." },
+  { q: "What grades is FinFun for?", a: "FinFun is for students in grades 3 to 10 (about 8 to 16 years old). Basic is for grades 3–5, Pro for grades 6–7 and Advantage for grades 8–10." },
   { q: "When are the sessions?", a: "Sessions run weekly, outside school hours. You’ll get the exact batch timings when you enroll, and can pick the batch that suits your teen." },
   { q: "Is it online or offline?", a: "Parent enrollments are live online sessions led by a FinFun trainer. Schools can also run FinFun offline in class with trained teachers." },
   { q: "Is it safe for my child?", a: "Yes. Only parents enroll and pay. Your teen gets a login created by you, we collect only their name and grade, we never show children’s names or photos publicly without your written consent, and there are no ads." },
@@ -312,5 +331,5 @@ export const waysToJoin = [
   { kicker: "Schools", title: "Partner School", who: "For principals & trustees", text: "Run FinFun in grades 6–10 with trained teachers, kits and competitions.", cta: "Book a demo", href: "/schools#partner", color: "sky" },
   { kicker: "CSR & Government", title: "Impact Partner", who: "For CSR heads & education departments", text: "Fund FinFun at scale and get measured outcomes in an impact report.", cta: "Get the report", href: "/schools#report", color: "lavender" },
   { kicker: "Teachers", title: "FinFun Teacher", who: "For teachers in partner schools", text: "Get trained to lead sessions — plus personal finance training for you.", cta: "Ask about training", href: "/contact", color: "green" },
-  { kicker: "Parents", title: "FinFun Family", who: "For parents of grades 6–10", text: "Enroll your teen in Pro or Advantage — live, online, game-based.", cta: "Enroll your teen", href: "/enrol", color: "pink" },
+  { kicker: "Parents", title: "FinFun Family", who: "For parents of grades 3–10", text: "Enroll your child in Basic, Pro or Advantage — live, online, game-based.", cta: "Enroll your teen", href: "/enrol", color: "pink" },
 ];
