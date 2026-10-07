@@ -1,8 +1,7 @@
-export type LeadType = "partnership" | "parent_query" | "report" | "enrol";
+export type LeadType = "partnership" | "report" | "enrol";
 
 export const REQUIRED: Record<LeadType, string[]> = {
   partnership: ["name", "role", "organisation", "city", "state", "students", "phone", "email"],
-  parent_query: ["name", "phone", "email", "message"],
   report: ["name", "email"],
   enrol: ["program", "parentName", "email", "phone", "childName", "grade", "school", "city", "consent"],
 };

@@ -6,7 +6,6 @@ export const metadata: Metadata = { title: "Thank you", robots: { index: false }
 
 const copy: Record<string, [string, string]> = {
   partnership: ["Thanks — we’ll be in touch!", "Our partnerships team will contact you within 2 working days."],
-  parent_query: ["Thanks for your question!", "We’ll reply on email or WhatsApp soon."],
   enrol: ["You’re almost in!", "We’ve saved your details. Our team will send the payment link and batch timings on WhatsApp and email shortly."],
 };
 

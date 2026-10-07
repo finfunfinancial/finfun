@@ -259,11 +259,10 @@ export const classroom = [
 
 export const parentFaq = [
   { q: "What grades is FinFun for?", a: "FinFun is for students in grades 6 to 10 (about 11 to 16 years old). Pro is for grades 6–7 and Advantage for grades 8–10." },
-  { q: "When are the sessions?", a: "Sessions run weekly, outside school hours. You’ll get the exact batch timings when you enrol, and can pick the batch that suits your teen." },
+  { q: "When are the sessions?", a: "Sessions run weekly, outside school hours. You’ll get the exact batch timings when you enroll, and can pick the batch that suits your teen." },
   { q: "Is it online or offline?", a: "Parent enrollments are live online sessions led by a FinFun trainer. Schools can also run FinFun offline in class with trained teachers." },
-  { q: "Is it safe for my child?", a: "Yes. Only parents enrol and pay. Your teen gets a login created by you, we collect only their name and grade, we never show children’s names or photos publicly without your written consent, and there are no ads." },
+  { q: "Is it safe for my child?", a: "Yes. Only parents enroll and pay. Your teen gets a login created by you, we collect only their name and grade, we never show children’s names or photos publicly without your written consent, and there are no ads." },
   { q: "Does my teen need a bank account or real money?", a: "No. All activities use play money and simulations. Real accounts are explained, never required." },
-  { q: "What is the refund policy?", a: "If FinFun isn’t right for your teen, ask for a refund within 7 days of your first session. See our refund policy for full details." },
 ];
 
 export const schoolFaq = [

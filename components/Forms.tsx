@@ -22,21 +22,6 @@ export function PartnershipForm() {
   return <LeadForm type="partnership" fields={partnershipFields} submitLabel="Request a call" />;
 }
 
-export function ParentQueryForm() {
-  return (
-    <LeadForm
-      type="parent_query"
-      submitLabel="Send question"
-      fields={[
-        { name: "name", label: "Parent’s name", autoComplete: "name" },
-        { name: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-        { name: "email", label: "Email", type: "email", autoComplete: "email", full: true },
-        { name: "message", label: "Your question", type: "textarea", full: true },
-      ]}
-    />
-  );
-}
-
 export function ReportForm() {
   return (
     <LeadForm
