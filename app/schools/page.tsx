@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PartnershipForm, ReportForm } from "@/components/Forms";
 import Img from "@/components/Img";
-import { CTA, Comparison, Faq, ImpactBand, JsonLd, PageHero, Partners, SectionCta, SectionHead, Spotlight, faqJsonLd } from "@/components/Sections";
+import { CTA, Comparison, Faq, ImpactBand, JsonLd, PageHero, Partners, Rubric, SectionCta, SectionHead, Spotlight, faqJsonLd } from "@/components/Sections";
 import Testimonials from "@/components/Testimonials";
 import { journey, partnershipSteps, schoolFaq } from "@/lib/content";
 
@@ -68,6 +68,7 @@ export default function Schools() {
         </div>
       </section>
 
+      <Rubric />
       <Comparison cta={[CTA.demo, CTA.report]} />
       <ImpactBand title="Proven at scale" />
       <Spotlight cta={[CTA.partner]} />

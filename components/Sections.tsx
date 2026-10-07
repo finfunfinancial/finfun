@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { classroom, comparison, impact, partners, spotlight, waysToJoin, type Program } from "@/lib/content";
+import { classroom, comparison, impact, partners, rubric, rubricLevels, spotlight, waysToJoin, type Program } from "@/lib/content";
 import { Arrow, Dots, ScribbleCircle, Spark } from "./Doodles";
 import Img from "./Img";
 
@@ -302,6 +302,46 @@ export function WaysToJoin() {
               <p>{w.text}</p>
               <Link className="btn btn-sm" href={w.href}>{w.cta}</Link>
             </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function Rubric() {
+  return (
+    <section className="section" aria-labelledby="rubric-h">
+      <div className="wrap">
+        <SectionHead eyebrow="How we measure" title={<span id="rubric-h">A rubric built for children</span>}>
+          Every child is assessed on four money skills through games and challenges. Teachers mark each skill at one of three levels, and your school gets a class-wide report.
+        </SectionHead>
+        <ol className="rubric-levels" aria-label="Levels">
+          {rubricLevels.map((l) => (
+            <li key={l.name}>
+              <Img src={l.medal} alt="" sizes="40px" loading="lazy" />
+              <strong>{l.name}</strong> {l.label}
+            </li>
+          ))}
+        </ol>
+        <div className="grid rubric-grid">
+          {rubric.map((r) => (
+            <article className="card rubric" key={r.skill}>
+              <h3>
+                <Img src={r.badge} alt="" sizes="64px" loading="lazy" />
+                {r.skill}
+              </h3>
+              <ol>
+                {r.levels.map((text, i) => (
+                  <li key={rubricLevels[i].name}>
+                    <Img src={rubricLevels[i].medal} alt="" sizes="32px" loading="lazy" />
+                    <span>
+                      <strong>{rubricLevels[i].name}:</strong> {text}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </article>
           ))}
         </div>
       </div>

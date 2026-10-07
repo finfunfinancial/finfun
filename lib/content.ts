@@ -77,6 +77,36 @@ export const journey = [
   { title: "Impact Report", icon: "/a/icons/journey-impact-report.webp", text: "Measured outcomes for your school." },
 ];
 
+// TODO(FinFun): confirm rubric skills and level descriptions with the curriculum team.
+export const rubricLevels = [
+  { name: "Bronze", label: "Getting started", medal: "/a/gamification/medal-3-bronze.webp" },
+  { name: "Silver", label: "Getting there", medal: "/a/gamification/medal-2-silver.webp" },
+  { name: "Gold", label: "Money champ", medal: "/a/gamification/medal-1-gold.webp" },
+];
+
+export const rubric = [
+  {
+    skill: "Money basics",
+    badge: "/a/gamification/badge-money-smart.webp",
+    levels: ["Recognises coins, notes and prices with help.", "Explains what money is for and compares prices.", "Explains where money comes from and how it grows."],
+  },
+  {
+    skill: "Saving & goals",
+    badge: "/a/gamification/badge-super-saver.webp",
+    levels: ["Knows why saving matters.", "Sets a saving goal and tracks it.", "Plans and reaches goals, and saves first."],
+  },
+  {
+    skill: "Smart spending",
+    badge: "/a/gamification/badge-budget-boss.webp",
+    levels: ["Sorts needs from wants with help.", "Makes a simple budget and sticks to it.", "Compares choices and spots impulse buys and fake deals."],
+  },
+  {
+    skill: "Staying safe",
+    badge: "/a/sticker/09-pin-secret.webp",
+    levels: ["Knows PINs and OTPs are secret.", "Spots common scams and tells an adult.", "Checks before paying and helps others stay safe."],
+  },
+];
+
 export const partnershipSteps = [
   { title: "Partner", text: "Sign up and we plan the program around your timetable.", icon: "/a/icons/impact-schools.webp" },
   { title: "Train", text: "Your teachers get trained with ready-to-run modules.", icon: "/a/icons/journey-teacher-training-modules.webp" },
