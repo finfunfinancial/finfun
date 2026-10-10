@@ -19,7 +19,7 @@ export const site = {
 // Festive offer button in the homepage hero; it opens Enroll with `code` pre-filled as the coupon.
 // Set `active: false` to hide it after the season.
 // TODO(FinFun): set the real discount (e.g. "20%") and coupon code.
-export const festiveOffer = { active: true, discount: "", code: "FESTIVE" };
+export const festiveOffer = { active: false, discount: "", code: "FESTIVE" };
 
 // Plain header links; the Courses, Kit, Programs and Resources dropdowns (navMenus) sit after `programs` below.
 export const nav = [

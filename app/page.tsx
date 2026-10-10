@@ -3,7 +3,7 @@ import Img from "@/components/Img";
 import { CTA, Classroom, Comparison, ImpactBand, JoinBanner, JsonLd, Partners, ProgramCard, SectionCta, SectionHead, Spotlight, WaysToJoin } from "@/components/Sections";
 import PostCard from "@/components/PostCard";
 import Testimonials from "@/components/Testimonials";
-import { festiveOffer, howItWorks, methods, programForGrade, programs, rubricLevels, site, spotlight, values } from "@/lib/content";
+import { festiveOffer, howItWorks, methods, programs, rubricLevels, site, spotlight, values } from "@/lib/content";
 import { posts } from "@/lib/posts";
 
 export default function Home() {
@@ -38,13 +38,6 @@ export default function Home() {
                 </Link>
               )}
             </div>
-            <p className="hero-grades">
-              <span>Course by grade:</span>
-              {[3, 4, 5, 6, 7, 8, 9, 10].map((g) => {
-                const p = programForGrade(g);
-                return p && <Link key={g} href={`/programs/${p.slug}`}>{g}</Link>;
-              })}
-            </p>
             <p className="hero-note">Trusted by 35,000+ schools across India · <Link href="/schools">For schools</Link></p>
           </div>
           <div className="bento">
