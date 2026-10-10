@@ -5,19 +5,23 @@ import { useUser } from "@/lib/lms/auth";
 import { downloadCsv, when } from "@/lib/lms/format";
 import { must, supabase } from "@/lib/lms/supabase";
 import { useData } from "@/lib/lms/use-data";
+import { TOPIC_LABELS } from "@/components/lms/EnquiryForm";
 
 type Tab = "new" | "contacted" | "all";
-const TOPIC: Record<string, string> = { parent: "Parent", school: "School", partnership: "CSR / partnership", other: "Other" };
+// Short labels for the admin table (the website form uses friendlier ones).
+const TOPIC: Record<string, string> = { ...TOPIC_LABELS, parent: "Parent", school: "School", partnership: "CSR / partnership", other: "Other" };
 
 // Messages from the finfun.club/contact form. "Mark contacted" records who followed up, when, and an optional note.
 export default function ContactRequests() {
   const me = useUser();
   const [tab, setTab] = useState<Tab>("new");
+  const [topic, setTopic] = useState("all");
   const { data, error, reload } = useData(() => {
     let query = supabase.from("contact_requests").select("*, profiles(full_name, email)").order("created_at", { ascending: false }).limit(300);
     if (tab !== "all") query = query.eq("status", tab);
+    if (topic !== "all") query = query.eq("topic", topic);
     return query.then(must);
-  }, [tab]);
+  }, [tab, topic]);
 
   // Reload this list and tell the sidebar to update its "new" count.
   const changed = () => {
@@ -40,18 +44,23 @@ export default function ContactRequests() {
   };
 
   const exportCsv = (rows: any[]) => downloadCsv(`finfun-contact-requests-${tab}.csv`, rows.map((r) => ({
-    received: r.created_at, name: r.name, email: r.email, phone: r.phone ?? "", topic: TOPIC[r.topic], message: r.message,
+    received: r.created_at, name: r.name, email: r.email, phone: r.phone ?? "", topic: TOPIC[r.topic], organisation: r.organisation ?? "",
+    child_grade: r.child_grade ?? "", preferred_time: r.preferred_time ?? "", message: r.message,
     status: r.status, contacted_at: r.contacted_at ?? "", contacted_by: r.profiles?.full_name ?? r.profiles?.email ?? "", note: r.note ?? "",
   })));
 
   return (
     <>
-      <PageHead title="Contact requests" sub="Messages sent from the Contact page. Reply, then mark them contacted.">
+      <PageHead title="Contact requests" sub="Every website form: contact, free demo classes, teacher training, partnerships and contests. Reply, then mark them contacted.">
         <div className="tabs" style={{ gridTemplateColumns: "repeat(3, 1fr)", width: 330, margin: 0 }}>
           <button aria-pressed={tab === "new"} onClick={() => setTab("new")}>New</button>
           <button aria-pressed={tab === "contacted"} onClick={() => setTab("contacted")}>Contacted</button>
           <button aria-pressed={tab === "all"} onClick={() => setTab("all")}>All</button>
         </div>
+        <select value={topic} onChange={(e) => setTopic(e.target.value)} aria-label="Filter by topic" style={{ width: 200 }}>
+          <option value="all">All topics</option>
+          {Object.keys(TOPIC_LABELS).map((t) => <option key={t} value={t}>{TOPIC[t]}</option>)}
+        </select>
         {data && data.length > 0 && <button className="btn white" onClick={() => exportCsv(data)}>Export CSV</button>}
       </PageHead>
       <Loaded data={data} error={error}>
@@ -68,7 +77,12 @@ export default function ContactRequests() {
                       <a href={`mailto:${r.email}`}>{r.email}</a>
                       {r.phone && <><br /><a href={`tel:${r.phone.replace(/\s/g, "")}`}>{r.phone}</a> · <a href={`https://wa.me/${r.phone.replace(/\D/g, "").replace(/^(?=\d{10}$)/, "91")}`} target="_blank" rel="noreferrer">WhatsApp</a></>}
                     </td>
-                    <td>{TOPIC[r.topic]}</td>
+                    <td>
+                      {TOPIC[r.topic]}
+                      {r.organisation && <div className="fine">{r.organisation}</div>}
+                      {r.child_grade && <div className="fine">Grade {r.child_grade}</div>}
+                      {r.preferred_time && <div className="fine">Prefers: {r.preferred_time}</div>}
+                    </td>
                     <td style={{ whiteSpace: "pre-wrap", minWidth: 260 }}>{r.message}</td>
                     <td>
                       {statusChip(r.status)}

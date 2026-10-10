@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { classroom, comparison, impact, partners, rubric, rubricLevels, spotlight, waysToJoin, type Program } from "@/lib/content";
+import { classroom, comparison, impact, joinSteps, partners, rubric, rubricLevels, spotlight, waysToJoin, type Program } from "@/lib/content";
 import { Arrow, Dots, ScribbleCircle, Spark } from "./Doodles";
 import Img from "./Img";
 
@@ -25,7 +25,8 @@ export const CTA = {
   partner: { label: "Partner with us", href: "/schools#partner" },
   demo: { label: "Request a demo", href: "/schools#partner" },
   enrol: { label: "Enroll your child", href: "/enrol" },
-  programs: { label: "See programs & prices", href: "/programs" },
+  trial: { label: "Try a free lesson", href: "/try" },
+  programs: { label: "See courses & prices", href: "/programs" },
   impact: { label: "See our full impact", href: "/impact" },
   report: { label: "Get the impact report", href: "/schools#report" },
 } satisfies Record<string, CtaLink>;
@@ -163,6 +164,38 @@ export function LetsLockup({ small }: { small?: boolean }) {
 
 export const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
 
+/** A price with the ₹ sign given more weight than the amount, and the unit spelled out: “₹1,499 per child”. */
+export function Price({ amount, unit = "per child", className = "" }: { amount: number; unit?: string; className?: string }) {
+  return (
+    <span className={`price ${className}`}>
+      <span className="rupee" aria-hidden="true">₹</span>
+      <span className="sr-only">Rupees </span>
+      {amount.toLocaleString("en-IN")} {unit && <small>{unit}</small>}
+    </span>
+  );
+}
+
+/** Courses → Free trial → Program → Payment, with the current step highlighted. */
+export function JoinSteps({ current }: { current: 0 | 1 | 2 | 3 }) {
+  return (
+    <nav className="join-steps" aria-label="How to join FinFun">
+      <ol>
+        {joinSteps.map((s, i) => (
+          <li key={s.title} className={i === current ? "now" : i < current ? "done" : ""} aria-current={i === current ? "step" : undefined}>
+            <Link href={s.href}>
+              <span className="js-num">{i < current ? "✓" : i + 1}</span>
+              <span>
+                <strong>{s.title}</strong>
+                <small>{s.text}</small>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 export function ProgramCard({ p, detail = true }: { p: Program; detail?: boolean }) {
   return (
     <article className="card program">
@@ -180,8 +213,8 @@ export function ProgramCard({ p, detail = true }: { p: Program; detail?: boolean
             <li key={f}>{f}</li>
           ))}
         </ul>
-        <div className="price">
-          {inr(p.price)} <small>per student</small>
+        <div>
+          <Price amount={p.price} />
         </div>
         <div className="btn-row">
           <Link className="btn btn-blue" href={`/enrol?program=${p.slug}`} data-track="enrol_click">

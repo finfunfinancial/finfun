@@ -3,7 +3,7 @@ import Link from "next/link";
 import { EnrolForm } from "@/components/Forms";
 import Checkout from "@/components/lms/Checkout";
 import Img from "@/components/Img";
-import { inr } from "@/components/Sections";
+import { JoinSteps, inr } from "@/components/Sections";
 import { programs } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -23,7 +23,8 @@ export default async function Enroll({ searchParams }: PageProps<"/enrol">) {
     <section className="section doodle bg-yellow">
       <div className="wrap split" style={{ alignItems: "start" }}>
         <div>
-          <span className="eyebrow">Enroll · Step 1 of 2</span>
+          <div style={{ marginBottom: 24 }}><JoinSteps current={3} /></div>
+          <span className="eyebrow">Enroll</span>
           <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)" }}>Enroll your child</h1>
           <p className="muted" style={{ fontSize: "1.15rem" }}>Fill in a few details, then pay securely. It takes about two minutes.</p>
           <div className="stack mt">
@@ -33,7 +34,7 @@ export default async function Enroll({ searchParams }: PageProps<"/enrol">) {
                 <div>
                   <span className="chip">{p.grades}</span>
                   <h2 style={{ fontSize: "1.3rem", margin: "6px 0 2px" }}>
-                    {p.name} · {inr(p.price)}
+                    {p.name} · {inr(p.price)} <small style={{ fontSize: "0.9rem" }}>per child</small>
                   </h2>
                   <p>
                     {p.focus} <Link href={`/programs/${p.slug}`}>Details</Link>

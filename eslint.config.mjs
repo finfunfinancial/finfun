@@ -20,6 +20,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // The LMS (lms/) is a separate app with its own config.
     "lms/**",
+    // Static games copied in as-is (e.g. Pocket Money Manager) keep their own style.
+    "public/games/**",
   ]),
 ]);
 

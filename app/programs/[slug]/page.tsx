@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Img from "@/components/Img";
-import { Faq, JoinBanner, JsonLd, PageHero, SectionCta, SectionHead, faqJsonLd, inr } from "@/components/Sections";
+import { Faq, JoinBanner, JoinSteps, JsonLd, PageHero, Price, SectionCta, SectionHead, faqJsonLd, inr } from "@/components/Sections";
 import { getProgram, parentFaq, programs, site } from "@/lib/content";
 
 export const dynamicParams = false;
@@ -32,13 +32,20 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
       />
       <JsonLd data={faqJsonLd(parentFaq)} />
       <PageHero eyebrow={p.grades} title={p.name} lead={p.focus} art={p.sticker} tone={{ basic: "bg-pink", pro: "bg-sky", advantage: "bg-yellow" }[p.slug]}>
-        <p className="price" style={{ marginBottom: 20 }}>
-          {inr(p.price)} <small>per student</small>
+        <p style={{ marginBottom: 20 }}>
+          <Price amount={p.price} />
         </p>
-        <Link className="btn btn-blue btn-lg" href={`/enrol?program=${p.slug}`} data-track="enrol_click">
-          Enroll in {p.name.replace("FinFun ", "")}
-        </Link>
+        <div className="btn-row">
+          <Link className="btn btn-blue btn-lg" href={`/enrol?program=${p.slug}`} data-track="enrol_click">
+            Enroll in {p.name.replace("FinFun ", "")}
+          </Link>
+          <Link className="btn btn-white btn-lg" href="/try">Try a free lesson first</Link>
+        </div>
       </PageHero>
+
+      <section className="section tight">
+        <div className="wrap"><JoinSteps current={2} /></div>
+      </section>
 
       <section className="section" aria-labelledby="inside-h">
         <div className="wrap">
@@ -90,7 +97,7 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
           </p>
         </div>
       </section>
-      <JoinBanner audience="parents" title={`Enroll in ${p.name}`} text={`${p.grades} · ${inr(p.price)} · Pay by UPI, card or netbanking.`} />
+      <JoinBanner audience="parents" title={`Enroll in ${p.name}`} text={`${p.grades} · ${inr(p.price)} per child · Pay by UPI, card or netbanking.`} />
     </>
   );
 }

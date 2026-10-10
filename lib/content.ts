@@ -21,14 +21,53 @@ export const site = {
 // TODO(FinFun): set the real discount (e.g. "20%") and coupon code.
 export const festiveOffer = { active: true, discount: "", code: "FESTIVE" };
 
+// Courses first (the main thing people come for); Gifting and Blog live under Resources and the footer.
 export const nav = [
-  { href: "/schools", label: "For Schools" },
-  { href: "/parents", label: "For Parents" },
-  { href: "/programs", label: "Programs" },
-  { href: "/gifting", label: "Gifting" },
+  { href: "/programs", label: "Courses" },
+  { href: "/parents", label: "Parents" },
+  { href: "/schools", label: "Schools" },
+  { href: "/teachers", label: "Teachers" },
+  { href: "/partners", label: "Partners" },
+  { href: "/resources", label: "Resources" },
   { href: "/about", label: "About" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact", label: "Help" },
+];
+
+// The parent's path from discovery to paying (shown as a step strip on Courses, Trial and Enroll).
+export const joinSteps = [
+  { title: "Courses", text: "Find the course for your child’s grade", href: "/programs" },
+  { title: "Free trial", text: "Try a sample lesson or book a demo class", href: "/try" },
+  { title: "Program", text: "Pick the program and class time", href: "/programs#compare" },
+  { title: "Payment", text: "Pay securely and start learning", href: "/enrol" },
+];
+
+// Gamified learning activities used across courses, workshops and the toolkit.
+export const activities = [
+  { title: "Finance journal", text: "Children log what they earn, save, spend and share each week — and spot their own habits.", img: "/a/sticker/02-the-budgeter.webp" },
+  { title: "Investing basics", text: "Simulated SIPs and market games show why starting early and spreading risk matter.", img: "/a/sticker/08-compound-power.webp" },
+  { title: "Mind mapping", text: "Connect earn, save, spend and share into one big picture of how money works.", img: "/a/home-page/method-mind-mapping.webp" },
+  { title: "Entrepreneurship", text: "Plan a small stall or service: costs, price, profit — and what to do with it.", img: "/a/sticker/01-the-entrepreneur.webp" },
+  { title: "Theatre", text: "Act out the shop, the bank and the scam call — and learn by doing.", img: "/a/home-page/method-theatre.webp" },
+  { title: "Quizzes", text: "Fast rounds on needs vs wants, UPI safety and compounding.", img: "/a/home-page/method-quiz.webp" },
+  { title: "Story writing", text: "Children write their own money goals and future plans.", img: "/a/home-page/method-story-writing.webp" },
+];
+
+// TODO(FinFun): confirm what each toolkit item contains, its price (if sold separately) and photos.
+export const toolkit = [
+  { title: "Lucky Ledger 2.0", text: "FinFun’s money game, new and improved. Details coming soon.", img: "/a/sticker/12-money-fun.webp", featured: true },
+  { title: "Board games", text: "Play-money board games that turn budgeting and saving into a family game night.", img: "/a/sticker/03-budget-boss.webp" },
+  { title: "Card games", text: "Money cards for quick games on needs vs wants, prices and scams.", img: "/a/sticker/06-need-or-want.webp" },
+  { title: "Finance journal", text: "A child’s own book to track pocket money, goals and savings.", img: "/a/sticker/02-the-budgeter.webp" },
+  { title: "Money stories", text: "Short stories that start real conversations about money at home.", img: "/a/sticker/04-dadis-gullak.webp" },
+  { title: "Activity sheets", text: "Printable mind maps, budgets and goal trackers for home or class.", img: "/a/sticker/04-goal-set.webp" },
+];
+
+// Ways organisations bring FinFun to more children (outreach pathway).
+export const partnerTypes = [
+  { title: "Schools", text: "Run FinFun in grades 3–10 with trained teachers, kits and competitions.", href: "/schools#partner", cta: "Bring FinFun to your school" },
+  { title: "NGOs and communities", text: "Workshops for children in community centres, libraries and after-school programs.", href: "/partners#enquire", cta: "Partner as an NGO" },
+  { title: "CSR partners", text: "Fund FinFun for schools you support and get a measured impact report.", href: "/partners#enquire", cta: "Fund a program" },
+  { title: "Government", text: "Integrate FinFun into state school programs, as with Telangana’s life skills book.", href: "/partners#enquire", cta: "Talk to us" },
 ];
 
 export const impact = [
@@ -191,6 +230,13 @@ export const programs: Program[] = [
 ];
 
 export const getProgram = (slug: string) => programs.find((p) => p.slug === slug);
+
+/** The course for a school grade (3–10), read from each program's "Grades a–b" label. */
+export const programForGrade = (grade: number) =>
+  programs.find((p) => {
+    const [lo, hi] = (p.grades.match(/\d+/g) ?? []).map(Number);
+    return grade >= lo && grade <= hi;
+  });
 
 export const parentTopics = [
   { title: "Budgeting", grade: "Grade 6+", sticker: "/a/sticker/02-the-budgeter.webp" },

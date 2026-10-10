@@ -44,6 +44,9 @@ export default function LoginForm({ fallback }: { fallback: React.ReactNode }) {
           <div className="login-head">
             <img src="/a/sticker/10-hi-im-rupi.webp" alt="" width={110} height={110} />
             <h1>{title}</h1>
+            {!me && mode !== "forgot" && !resetting && (
+              <p className="muted">One account for everything: book a free trial, pay for a course, and follow your child’s classes and progress.</p>
+            )}
           </div>
           <div className="card">
             {linkError && !me && <Notice kind="error">That email link has expired or was already used. Please try again.</Notice>}

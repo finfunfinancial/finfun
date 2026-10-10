@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Img from "@/components/Img";
-import { CTA, JoinBanner, PageHero, ProgramCard, SectionCta, SectionHead, inr } from "@/components/Sections";
-import { programs, type Program } from "@/lib/content";
+import { CTA, JoinBanner, JoinSteps, PageHero, ProgramCard, SectionCta, SectionHead, inr } from "@/components/Sections";
+import { programForGrade, programs, toolkit, type Program } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Programs: Basic (grades 3–5), Pro (grades 6–7) and Advantage (grades 8–10)",
-  description: "Compare FinFun Basic, Pro and Advantage — topics, grades, format and price. Gamified money skills for grades 3 to 10.",
+  title: "Courses by grade: Basic (grades 3–5), Pro (grades 6–7) and Advantage (grades 8–10)",
+  description: "Find the FinFun course for your child’s grade — Basic, Pro or Advantage. Topics, format and price per child. Gamified money skills for grades 3 to 10.",
   alternates: { canonical: "/programs" },
 };
 
@@ -16,21 +16,48 @@ export default function Programs() {
     ["Focus", (p) => p.focus],
     ["Format", (p) => p.format[0]],
     ["Activities", (p) => p.format[1]],
-    ["Price", (p) => inr(p.price)],
+    ["Price", (p) => `${inr(p.price)} per child`],
   ];
   return (
     <>
-      <PageHero eyebrow="Programs" title={<>Three programs. <span className="mark">One goal.</span></>} lead="Money-smart kids. Pick the program that matches your child’s grade." art="/a/sticker/12-money-fun.webp" />
+      <PageHero eyebrow="Courses" title={<>Money skills for <span className="mark">every grade</span></>} lead="Three courses, each built for how children think at their age. Start with your child’s grade." art="/a/sticker/12-money-fun.webp">
+        <div className="grade-finder" aria-label="Find a course by grade">
+          <strong>My child is in:</strong>
+          <div className="btn-row">
+            {[3, 4, 5, 6, 7, 8, 9, 10].map((g) => {
+              const p = programForGrade(g);
+              return p && <Link key={g} className="btn btn-white btn-sm" href={`#${p.slug}`}>Grade {g}</Link>;
+            })}
+          </div>
+        </div>
+      </PageHero>
+      <section className="section tight">
+        <div className="wrap"><JoinSteps current={0} /></div>
+      </section>
       <section className="section">
         <div className="wrap">
           <div className="grid g2">
             {programs.map((p) => (
-              <ProgramCard key={p.slug} p={p} />
+              <div id={p.slug} key={p.slug} style={{ scrollMarginTop: 96 }}>
+                <ProgramCard p={p} />
+              </div>
             ))}
           </div>
+          <SectionCta links={[{ ...CTA.trial, tone: "white" }]} />
         </div>
       </section>
-      <section className="section bg-white" aria-labelledby="cmp-h">
+      <section className="section tight" aria-label="Lucky Ledger 2.0">
+        <div className="wrap">
+          <Link className="card highlight-banner" href="/toolkit">
+            <Img src={toolkit[0].img} alt="" sizes="96px" loading="lazy" style={{ width: 96 }} />
+            <span>
+              <span className="eyebrow">New</span>
+              <strong>{toolkit[0].title}</strong> {toolkit[0].text} See the FinFun Toolkit →
+            </span>
+          </Link>
+        </div>
+      </section>
+      <section className="section bg-white" aria-labelledby="cmp-h" id="compare">
         <div className="wrap">
           <SectionHead title={<span id="cmp-h">Compare side by side</span>} />
           <div className="card" style={{ overflowX: "auto", padding: 0 }}>

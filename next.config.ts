@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       { source: "/courses/:slug*", destination: "/programs", permanent: true },
       { source: "/s/authenticate", destination: "/login", permanent: true },
       { source: "/programs/basics", destination: "/programs", permanent: true },
+      { source: "/courses", destination: "/programs", permanent: true },
     ];
   },
 };

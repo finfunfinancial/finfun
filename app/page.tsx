@@ -3,7 +3,7 @@ import Img from "@/components/Img";
 import { CTA, Classroom, Comparison, ImpactBand, JoinBanner, JsonLd, Partners, ProgramCard, SectionCta, SectionHead, Spotlight, WaysToJoin } from "@/components/Sections";
 import PostCard from "@/components/PostCard";
 import Testimonials from "@/components/Testimonials";
-import { festiveOffer, howItWorks, methods, programs, site, values } from "@/lib/content";
+import { festiveOffer, howItWorks, methods, programForGrade, programs, rubricLevels, site, spotlight, values } from "@/lib/content";
 import { posts } from "@/lib/posts";
 
 export default function Home() {
@@ -25,15 +25,15 @@ export default function Home() {
           <div>
             <span className="eyebrow">{site.grades} · Ages 8–16</span>
             <h1>
-              Money skills for <span className="mark">real life</span>
+              Money confidence for <span className="mark">real life</span>
             </h1>
-            <p className="lead">Budgeting, UPI and scam safety, SIPs and investing — learned through games, quizzes and challenges teens actually enjoy.</p>
+            <p className="lead">Children build lifelong money habits — budgeting, saving, staying safe online and investing — through games, quizzes and challenges they actually enjoy.</p>
             <div className="btn-row">
-              <Link className="btn btn-blue btn-lg" href="/schools" data-track="path_schools">
-                For Schools
+              <Link className="btn btn-blue btn-lg" href="/programs" data-track="path_courses">
+                Find a course
               </Link>
-              <Link className="btn btn-lg" href="/parents" data-track="path_parents">
-                For Parents
+              <Link className="btn btn-lg" href="/try" data-track="path_trial">
+                Try it free
               </Link>
               {festiveOffer.active && (
                 <Link className="btn btn-lg btn-festive" href={`/enrol?coupon=${festiveOffer.code}`} data-track="festive_click">
@@ -41,7 +41,14 @@ export default function Home() {
                 </Link>
               )}
             </div>
-            <p className="hero-note">Trusted by 35,000+ schools across India</p>
+            <p className="hero-grades">
+              <span>Course by grade:</span>
+              {[3, 4, 5, 6, 7, 8, 9, 10].map((g) => {
+                const p = programForGrade(g);
+                return p && <Link key={g} href={`/programs/${p.slug}`}>{g}</Link>;
+              })}
+            </p>
+            <p className="hero-note">Trusted by 35,000+ schools across India · <Link href="/schools">For schools</Link></p>
           </div>
           <div className="bento">
             <div className="bento-tile bento-main">
@@ -63,6 +70,14 @@ export default function Home() {
       </section>
 
       <ImpactBand />
+
+      <section className="section" aria-labelledby="t-h">
+        <div className="wrap">
+          <SectionHead eyebrow="Testimonials" title={<span id="t-h">What schools, officials and parents say</span>} />
+          <Testimonials />
+        </div>
+      </section>
+
       <Spotlight />
 
       <section className="section" aria-labelledby="why-h">
@@ -120,8 +135,8 @@ export default function Home() {
 
       <section className="section bg-sky" aria-labelledby="programs-h">
         <div className="wrap">
-          <SectionHead eyebrow="Programs" title={<span id="programs-h">Pick the right program for your teen</span>}>
-            Three programs, built for how kids think at each stage.
+          <SectionHead eyebrow="Courses by grade" title={<span id="programs-h">Pick the right course for your child</span>}>
+            Three courses, built for how children think at each stage.
           </SectionHead>
           <div className="grid g2">
             {programs.map((p) => (
@@ -130,21 +145,48 @@ export default function Home() {
           </div>
           <p className="center mt">
             <Link className="link-arrow" href="/programs">
-              Compare programs →
-            </Link>
+              Compare courses →
+            </Link>{" "}
+            · <Link className="link-arrow" href="/try">Try a free lesson →</Link>
           </p>
         </div>
       </section>
 
-      <Partners />
-
-      <section className="section" aria-labelledby="t-h">
+      <section className="section" aria-labelledby="out-h">
         <div className="wrap">
-          <SectionHead eyebrow="Testimonials" title={<span id="t-h">What schools, officials and parents say</span>} />
-          <Testimonials />
-          <SectionCta links={[CTA.partner, CTA.enrol]} />
+          <SectionHead eyebrow="Student outcomes" title={<span id="out-h">Confidence you can measure</span>}>
+            Every child is assessed on four money skills, from Bronze to Gold — and the habits show up at home.
+          </SectionHead>
+          <div className="grid g3">
+            <div className="card stack">
+              <h3>Skills, assessed</h3>
+              <ol className="rubric-levels" aria-label="Levels" style={{ margin: 0 }}>
+                {rubricLevels.map((l) => (
+                  <li key={l.name}>
+                    <Img src={l.medal} alt="" sizes="40px" loading="lazy" />
+                    <strong>{l.name}</strong> {l.label}
+                  </li>
+                ))}
+              </ol>
+              <p style={{ margin: 0 }}>Money basics · Saving & goals · Smart spending · Staying safe</p>
+            </div>
+            <div className="card stack">
+              <h3>Habits that stick</h3>
+              <p className="spotlight-head" style={{ margin: 0 }}>“{spotlight.headline}”</p>
+              <p className="fine" style={{ margin: 0 }}>{spotlight.name}, {spotlight.role}</p>
+            </div>
+            <figure className="card stack" style={{ margin: 0 }}>
+              <h3>Mind maps by students</h3>
+              <Img src="/a/home-page/method-mind-mapping.webp" alt="Children connecting earn, save, spend and share in a mind map" sizes="(max-width: 800px) 90vw, 360px" loading="lazy" />
+              {/* TODO(FinFun): replace with photos of real student mind maps (with parent consent). */}
+              <figcaption className="fine">Children connect earning, saving, spending and sharing into one big picture.</figcaption>
+            </figure>
+          </div>
+          <SectionCta links={[CTA.impact, CTA.partner]} />
         </div>
       </section>
+
+      <Partners />
 
       <section className="section bg-white" aria-labelledby="blog-h">
         <div className="wrap">

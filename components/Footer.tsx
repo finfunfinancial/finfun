@@ -19,19 +19,34 @@ export default function Footer() {
           <div>
             <h2>Get started</h2>
             <ul>
-              <li><Link href="/schools">For Schools</Link></li>
-              <li><Link href="/parents">For Parents</Link></li>
-              <li><Link href="/programs">Programs</Link></li>
+              <li><Link href="/programs">Courses</Link></li>
+              <li><Link href="/try">Free trial</Link></li>
               <li><Link href="/enrol">Enroll</Link></li>
+              <li><Link href="/parents">Parents</Link></li>
+              <li><Link href="/schools">Schools</Link></li>
+              <li><Link href="/teachers">Teachers</Link></li>
+              <li><Link href="/partners">Partners</Link></li>
             </ul>
           </div>
           <div>
-            <h2>FinFun</h2>
+            <h2>Resources</h2>
             <ul>
+              <li><Link href="/toolkit">FinFun Toolkit</Link></li>
+              <li><Link href="/fest">FinFun Fest & contests</Link></li>
+              <li><Link href="/resources#activities">Learning activities</Link></li>
+              <li><Link href="/wellbeing">Well-being</Link></li>
+              <li><Link href="/blog">Blog</Link></li>
+              <li><Link href="/gifting">Gifting</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h2>Help</h2>
+            <ul>
+              <li><Link href="/contact">Contact us</Link></li>
+              <li><a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a></li>
+              <li><Link href="/login">Log in / Sign up</Link></li>
               <li><Link href="/about">About</Link></li>
               <li><Link href="/impact">Impact</Link></li>
-              <li><Link href="/blog">Blog</Link></li>
-              <li><Link href="/contact">Contact</Link></li>
             </ul>
           </div>
           <div>

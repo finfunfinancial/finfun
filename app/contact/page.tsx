@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ContactForm from "@/components/lms/ContactForm";
+import EnquiryForm from "@/components/lms/EnquiryForm";
 import { PageHero } from "@/components/Sections";
 import { site } from "@/lib/content";
 
@@ -18,7 +18,7 @@ export default function Contact() {
       <section className="section" aria-label="Contact form">
         <div className="wrap" style={{ maxWidth: 760 }}>
           <div className="portal">
-            <ContactForm />
+            <EnquiryForm title="Send us a message" topics={["parent", "school", "teacher", "partnership", "ngo", "contest", "other"]} submitLabel="Send message" />
           </div>
         </div>
       </section>

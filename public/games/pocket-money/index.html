@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pocket Money Manager</title>
+  <meta name="description" content="A 5-day pocket money game for Class 6–7: spend wisely, save when you can, and be ready for surprises.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="hud" aria-label="Game status">
+      <div class="hud-item"><span class="hud-label">Day</span><b id="hud-day">1 of 5</b></div>
+      <div class="hud-item money"><span class="hud-label">Money</span><b id="hud-money">₹500</b></div>
+      <div class="hud-item points"><span class="hud-label">Points</span><b id="hud-points">0</b></div>
+    </header>
+
+    <main class="stage" aria-label="Game scene">
+      <img id="scene-bg" class="scene-bg" src="assets/backgrounds/home.svg" alt="">
+      <div id="location" class="location">Home</div>
+      <div id="player" class="player" role="img" aria-label="Schoolboy character"></div>
+      <div id="confetti" class="confetti" aria-hidden="true"></div>
+      <div id="toast" class="toast" role="status" aria-live="assertive"></div>
+    </main>
+
+    <section class="panel" aria-live="polite">
+      <p id="prompt" class="prompt">You got ₹500 pocket money for the week.</p>
+      <div id="choices" class="choices"></div>
+      <div id="feedback" class="feedback" hidden>
+        <p><span id="feedback-text"></span> <b id="feedback-points" class="pts"></b></p>
+        <button id="next-btn" class="btn btn-primary" type="button">Next day</button>
+      </div>
+    </section>
+
+    <div id="start" class="overlay">
+      <div class="card">
+        <p class="kicker">A 5-day money challenge</p>
+        <h1>Pocket Money Manager</h1>
+        <p>You have <b>₹500</b> pocket money for the week. Each day brings a new choice.</p>
+        <ul class="rules">
+          <li><span class="dot" style="background:var(--green)"></span>Spend on what you need</li>
+          <li><span class="dot" style="background:var(--yellow)"></span>Have fun, but check your balance</li>
+          <li><span class="dot" style="background:var(--blue)"></span>Save some for surprises</li>
+        </ul>
+        <button id="start-btn" class="btn btn-primary btn-big" type="button">Start Game</button>
+      </div>
+    </div>
+
+    <div id="results" class="overlay" hidden>
+      <div class="card results-card">
+        <p class="kicker" id="r-status"></p>
+        <h2 id="r-band"></h2>
+        <p id="r-message"></p>
+        <dl class="audit">
+          <div><dt>Starting</dt><dd id="r-start"></dd></div>
+          <div><dt>Spent</dt><dd id="r-spent"></dd></div>
+          <div><dt>Saved</dt><dd id="r-saved"></dd></div>
+          <div><dt>Smart choices</dt><dd id="r-smart"></dd></div>
+        </dl>
+        <ul id="r-bonus" class="bonus"></ul>
+        <p class="total">Total points <b id="r-points"></b></p>
+        <button id="again-btn" class="btn btn-primary btn-big" type="button">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/situations.js"></script>
+  <script src="js/money.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
