@@ -429,7 +429,7 @@ p {
   top: calc(100% + 18px);
   left: 50%;
   z-index: 60;
-  width: 360px;
+  width: 380px;
   max-width: calc(100vw - 2 * var(--gutter));
   padding: 12px;
   background: var(--white);
@@ -442,7 +442,7 @@ p {
   transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
 }
 .nav-panel.wide {
-  width: 640px;
+  width: 680px;
   left: 0;
   transform: translateY(-6px);
 }
@@ -480,11 +480,34 @@ p {
   padding: 0;
 }
 .nav-link {
-  display: block;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  column-gap: 12px;
+  align-items: start;
   padding: 10px 12px;
   border-radius: var(--radius-sm);
   color: var(--ink);
   text-decoration: none;
+}
+/* Stickers are captioned tiles; show just the figure, cropped into a small badge. */
+.nav-icon {
+  grid-row: span 2;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--white);
+}
+.nav-icon img {
+  width: 60px;
+  height: 60px;
+  max-width: none;
+  margin: -7px 0 0 -12px;
+}
+.nav-link-label,
+.nav-link-text {
+  grid-column: 2;
 }
 .nav-link:hover,
 .nav-link:focus-visible,
@@ -509,7 +532,6 @@ p {
   white-space: nowrap;
 }
 .nav-link-text {
-  display: block;
   margin-top: 2px;
   font-size: 0.88rem;
   line-height: 1.4;
@@ -641,10 +663,18 @@ p {
     grid-template-columns: 1fr;
   }
   .nav-link {
-    padding: 12px;
+    grid-template-columns: 32px 1fr;
+    padding: 10px 12px;
   }
-  .nav-link-text {
-    display: none;
+  .nav-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+  .nav-icon img {
+    width: 48px;
+    height: 48px;
+    margin: -6px 0 0 -10px;
   }
   /* The floating WhatsApp and Contests buttons would cover the open menu. */
   body:has(.header.open) :is(.wa, .contest-pill) {

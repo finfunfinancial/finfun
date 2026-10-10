@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { nav, navMenus, site, type NavMenu } from "@/lib/content";
+import Img from "./Img";
 import Logo from "./Logo";
 
 // Logged in? Supabase keeps the session in localStorage as "sb-<project>-auth-token"; reading the key avoids
@@ -23,6 +24,8 @@ export default function Header() {
   const loggedIn = useSyncExternalStore(subscribe, hasSession, () => false);
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState<string | null>(null);
+  // Menu icons start loading once someone heads for the menu, so pages that never open it don't fetch them.
+  const [warm, setWarm] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const path = usePathname();
   const activeMenu = menuFor(path);
@@ -45,12 +48,19 @@ export default function Header() {
     };
   }, [menu]);
 
-  // Down arrow on a menu button opens it and moves to the first link.
+  // Down arrow on a menu button opens it and moves to the first link (once the panel is visible).
+  const focusFirst = useRef(false);
+  useEffect(() => {
+    if (!menu || !focusFirst.current) return;
+    focusFirst.current = false;
+    document.querySelector<HTMLAnchorElement>(`#nav-${menu.toLowerCase()} a`)?.focus();
+  }, [menu]);
   const onTriggerKey = (e: React.KeyboardEvent, m: NavMenu) => {
     if (e.key !== "ArrowDown") return;
     e.preventDefault();
+    if (menu === m.label) return document.querySelector<HTMLAnchorElement>(`#${menuId(m)} a`)?.focus();
+    focusFirst.current = true;
     setMenu(m.label);
-    requestAnimationFrame(() => document.querySelector<HTMLAnchorElement>(`#${menuId(m)} a`)?.focus());
   };
 
   return (
@@ -60,7 +70,7 @@ export default function Header() {
     >
       <div className="wrap header-inner">
         <Logo />
-        <button className="menu-btn" aria-expanded={open} aria-controls="main-nav" onClick={() => setOpen(!open)}>
+        <button className="menu-btn" aria-expanded={open} aria-controls="main-nav" onClick={() => (setOpen(!open), setWarm(true))}>
           <span />
           <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
         </button>
@@ -69,6 +79,8 @@ export default function Header() {
           className="nav"
           aria-label="Main"
           ref={navRef}
+          onPointerEnter={() => setWarm(true)}
+          onFocus={() => setWarm(true)}
         >
           {navMenus.map((m) => {
             const isOpen = menu === m.label;
@@ -99,6 +111,7 @@ export default function Header() {
                           {g.links.map((l) => (
                             <li key={l.label}>
                               <Link className="nav-link" href={l.href} aria-current={l.href === path ? "page" : undefined}>
+                                {l.icon && <span className="nav-icon">{warm && <Img src={l.icon} alt="" sizes="60px" loading="eager" />}</span>}
                                 <span className="nav-link-label">
                                   {l.label}
                                   {l.tag && <span className="nav-tag">{l.tag}</span>}

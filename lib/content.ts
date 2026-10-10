@@ -21,7 +21,7 @@ export const site = {
 // TODO(FinFun): set the real discount (e.g. "20%") and coupon code.
 export const festiveOffer = { active: true, discount: "", code: "FESTIVE" };
 
-// Plain header links; the Courses, Solutions and Resources dropdowns (navMenus) sit after `programs` below.
+// Plain header links; the Courses, Kit, Programs and Resources dropdowns (navMenus) sit after `programs` below.
 export const nav = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Help" },
@@ -225,10 +225,12 @@ export const programs: Program[] = [
 
 export const getProgram = (slug: string) => programs.find((p) => p.slug === slug);
 
-// Header menu: Courses, Solutions and Resources open dropdowns; the rest are plain links.
+// Header menu: Courses, Kit, Programs and Resources open dropdowns; the rest are plain links.
 // Every href points at a page (or section) that exists — add new pages here once they're live.
-export type NavLink = { label: string; href: string; text?: string; tag?: string };
+export type NavLink = { label: string; href: string; text?: string; tag?: string; icon?: string };
 export type NavMenu = { label: string; groups: { title?: string; links: NavLink[] }[]; more: NavLink };
+
+const s = (name: string) => `/a/sticker/${name}.webp`;
 
 export const navMenus: NavMenu[] = [
   {
@@ -236,30 +238,42 @@ export const navMenus: NavMenu[] = [
     groups: [
       {
         title: "Courses by grade",
-        links: programs.map((p) => ({ label: p.name, tag: p.grades, text: p.focus, href: `/programs/${p.slug}` })),
+        links: programs.map((p) => ({ label: p.name, tag: p.grades, text: p.focus, href: `/programs/${p.slug}`, icon: p.sticker })),
       },
       {
-        title: "Learning tools",
+        title: "Games & skills",
         links: [
-          { label: "Lucky Ledger 2.0", tag: "New", text: "FinFun’s money game, new and improved.", href: "/toolkit#lucky-ledger" },
-          { label: "FinFun Toolkit", text: "Board games, card games and activity sheets.", href: "/toolkit#kit" },
-          { label: "Finance Journal", text: "Track pocket money, goals and savings.", href: "/toolkit#kit" },
-          { label: "Investing & Entrepreneurship", text: "Market games and planning a small stall.", href: "/resources#activities" },
+          { label: "Lucky Ledger 2.0", tag: "New", text: "FinFun’s money game, new and improved.", href: "/toolkit#lucky-ledger", icon: s("12-money-fun") },
+          { label: "Investing & Entrepreneurship", text: "Market games, and planning a stall: costs, price and profit.", href: "/resources#activities", icon: s("01-the-entrepreneur") },
         ],
       },
     ],
     more: { label: "Compare all courses", href: "/programs" },
   },
   {
-    label: "Solutions",
+    label: "Kit",
     groups: [
       {
         links: [
-          { label: "For Parents", text: "Financial literacy support and activities for families.", href: "/parents" },
-          { label: "For Teachers", text: "Teacher training and classroom resources.", href: "/teachers" },
-          { label: "For Schools", text: "Curriculum integration and school partnerships.", href: "/schools" },
-          { label: "For NGOs & Communities", text: "Community financial education initiatives.", href: "/partners" },
-          { label: "For Government & CSR", text: "Large-scale financial literacy partnerships.", href: "/partners#enquire" },
+          { label: "FinFun Toolkit for Children", text: "Learning activities and money exercises for home or class.", href: "/toolkit", icon: s("04-goal-set") },
+          { label: "Board Games & Card Games", text: "Play-money games on budgeting, prices and needs vs wants.", href: "/toolkit#kit", icon: s("03-budget-boss") },
+          { label: "Finance Journal", text: "Track pocket money, spending, savings and goals.", href: "/toolkit#kit", icon: s("02-the-budgeter") },
+          { label: "Mind Mapping Activities", text: "Connect earn, save, spend and share in one picture.", href: "/resources#activities", icon: s("05-spend-smart") },
+        ],
+      },
+    ],
+    more: { label: "See the whole kit", href: "/toolkit" },
+  },
+  {
+    label: "Programs",
+    groups: [
+      {
+        links: [
+          { label: "Parent Programs", text: "Resources and support to teach money at home.", href: "/parents", icon: s("07-family-budget") },
+          { label: "Teacher Training Programs", text: "Training and classroom implementation support.", href: "/teachers", icon: s("07-money-coach") },
+          { label: "School Partnership Programs", text: "Curriculum integration and school partnerships.", href: "/schools", icon: s("07-taxes-help-all") },
+          { label: "NGO & Community Programs", text: "Financial education for communities.", href: "/partners", icon: s("10-share-give") },
+          { label: "Government & CSR Programs", text: "Large-scale programs and institutional partnerships.", href: "/partners#enquire", icon: s("04-bank-buddy") },
         ],
       },
     ],
@@ -270,12 +284,12 @@ export const navMenus: NavMenu[] = [
     groups: [
       {
         links: [
-          { label: "Blogs", text: "Financial literacy articles and money guides.", href: "/blog" },
-          { label: "Train-the-Trainer", text: "Training path for educators and facilitators.", href: "/teachers#trainer" },
-          { label: "FinFun Fest", text: "Events, competitions and money challenges.", href: "/fest" },
-          { label: "Evaluation Resources", text: "Rubrics and learning-outcome measurement.", href: "/teachers#rubric" },
-          { label: "Parent Assist", text: "Teaching children about money at home.", href: "/parents#assist" },
-          { label: "Wellness Centre", text: "Healthy financial habits and well-being.", href: "/wellbeing" },
+          { label: "Blogs", text: "Financial literacy articles and money guides.", href: "/blog", icon: s("09-scam-alert") },
+          { label: "Train-the-Trainer", text: "Training path for educators and facilitators.", href: "/teachers#trainer", icon: s("05-hi-im-finbot") },
+          { label: "FinFun Fest", text: "Events, competitions and money challenges.", href: "/fest", icon: s("08-goal-reached") },
+          { label: "Rubric-Based Evaluation", text: "Assessment rubrics and learning outcomes.", href: "/teachers#rubric", icon: s("05-rupi-approves") },
+          { label: "Parent Assist", text: "Teaching children about money at home.", href: "/parents#assist", icon: s("08-stay-covered") },
+          { label: "Wellness Centre", text: "Healthy financial habits and well-being.", href: "/wellbeing", icon: s("06-rupi-thinks") },
         ],
       },
     ],
