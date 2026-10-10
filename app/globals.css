@@ -2029,6 +2029,10 @@ p {
   margin-right: 2px;
   vertical-align: -0.06em;
 }
+/* Sized by its own column, not the screen: on /enrol it sits in a narrow column beside the form. */
+.join-steps {
+  container-type: inline-size;
+}
 .join-steps ol {
   list-style: none;
   margin: 0;
@@ -2048,6 +2052,9 @@ p {
   background: var(--white);
   color: var(--ink);
   text-decoration: none;
+}
+.join-steps a > span:last-child {
+  min-width: 0;
 }
 .join-steps strong {
   display: block;
@@ -2077,9 +2084,14 @@ p {
 .join-steps .done .js-num {
   background: var(--green);
 }
-@media (max-width: 760px) {
+@container (max-width: 760px) {
   .join-steps ol {
     grid-template-columns: 1fr 1fr;
+  }
+}
+@container (max-width: 340px) {
+  .join-steps ol {
+    grid-template-columns: 1fr;
   }
 }
 .contest-pill {
