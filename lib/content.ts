@@ -27,10 +27,9 @@ export const nav = [
   { href: "/contact", label: "Help" },
 ];
 
-// The parent's path from discovery to paying (shown as a step strip on Courses, Trial and Enroll).
+// The parent's path from discovery to paying (shown as a step strip on Courses, Parents, program pages and Enroll).
 export const joinSteps = [
   { title: "Courses", text: "Find the course for your child’s grade", href: "/programs" },
-  { title: "Free trial", text: "Try a sample lesson or book a demo class", href: "/try" },
   { title: "Program", text: "Pick the program and class time", href: "/programs#compare" },
   { title: "Payment", text: "Pay securely and start learning", href: "/enrol" },
 ];

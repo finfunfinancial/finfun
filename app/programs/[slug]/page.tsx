@@ -44,7 +44,7 @@ export default async function ProgramPage({ params }: PageProps<"/programs/[slug
       </PageHero>
 
       <section className="section tight">
-        <div className="wrap"><JoinSteps current={2} /></div>
+        <div className="wrap"><JoinSteps current={1} /></div>
       </section>
 
       <section className="section" aria-labelledby="inside-h">

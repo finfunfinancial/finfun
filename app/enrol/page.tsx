@@ -23,7 +23,7 @@ export default async function Enroll({ searchParams }: PageProps<"/enrol">) {
     <section className="section doodle bg-yellow">
       <div className="wrap split" style={{ alignItems: "start" }}>
         <div>
-          <div style={{ marginBottom: 24 }}><JoinSteps current={3} /></div>
+          <div style={{ marginBottom: 24 }}><JoinSteps current={2} /></div>
           <span className="eyebrow">Enroll</span>
           <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)" }}>Enroll your child</h1>
           <p className="muted" style={{ fontSize: "1.15rem" }}>Fill in a few details, then pay securely. It takes about two minutes.</p>

@@ -175,8 +175,8 @@ export function Price({ amount, unit = "per child", className = "" }: { amount: 
   );
 }
 
-/** Courses → Free trial → Program → Payment, with the current step highlighted. */
-export function JoinSteps({ current }: { current: 0 | 1 | 2 | 3 }) {
+/** Courses → Program → Payment, with the current step highlighted. */
+export function JoinSteps({ current }: { current: 0 | 1 | 2 }) {
   return (
     <nav className="join-steps" aria-label="How to join FinFun">
       <ol>

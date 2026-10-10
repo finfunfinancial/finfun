@@ -2038,7 +2038,7 @@ p {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 .join-steps a {
@@ -2084,12 +2084,7 @@ p {
 .join-steps .done .js-num {
   background: var(--green);
 }
-@container (max-width: 760px) {
-  .join-steps ol {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-@container (max-width: 340px) {
+@container (max-width: 640px) {
   .join-steps ol {
     grid-template-columns: 1fr;
   }

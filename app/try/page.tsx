@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import EnquiryForm from "@/components/lms/EnquiryForm";
 import SampleQuiz from "@/components/SampleQuiz";
-import { JoinBanner, JoinSteps, PageHero, SectionCta, SectionHead } from "@/components/Sections";
+import { JoinBanner, PageHero, SectionCta, SectionHead } from "@/components/Sections";
 
 export const metadata: Metadata = {
   title: "Try FinFun free",
@@ -9,15 +9,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/try" },
 };
 
-// Step 2 of the journey: try before choosing a program — play now, or book a live demo class.
+// Try before choosing a program: play now, or book a live demo class.
 export default function Try() {
   return (
     <>
       <PageHero eyebrow="Free trial" title={<>Try FinFun <span className="mark">free</span></>} art="/a/sticker/05-rupi-approves.webp" tone="bg-sky"
         lead="Play a money game and a quick quiz right now — no sign-up — or book a free live demo class with a FinFun trainer." />
-      <section className="section tight">
-        <div className="wrap"><JoinSteps current={1} /></div>
-      </section>
 
       <section className="section" aria-labelledby="play-h">
         <div className="wrap">
