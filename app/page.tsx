@@ -25,7 +25,7 @@ export default function Home() {
           <div>
             <span className="eyebrow">{site.grades} · Ages 8–16</span>
             <h1>
-              Money confidence for <span className="mark">real life</span>
+              Building financially <span className="mark">curious, confident and capable</span>
             </h1>
             <p className="lead">Children build lifelong money habits — budgeting, saving, staying safe online and investing — through games, quizzes and challenges they actually enjoy.</p>
             <div className="btn-row">

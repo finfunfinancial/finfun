@@ -700,6 +700,7 @@ p {
 }
 .hero h1 {
   margin-bottom: 18px;
+  font-size: clamp(2.2rem, 5vw, 3.5rem); /* the headline is a long phrase; keep it to ~3 lines */
 }
 .hero .lead {
   font-size: clamp(1.1rem, 1.8vw, 1.3rem);
