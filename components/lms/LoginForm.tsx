@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Notice } from "@/components/lms/ui";
 import { homeFor, lmsReady, useMe } from "@/lib/lms/auth";
 import { supabase } from "@/lib/lms/supabase";
@@ -19,6 +19,15 @@ export default function LoginForm({ fallback }: { fallback: React.ReactNode }) {
     if (home && home !== "/") router.replace(home);
   }, [home, router]);
 
+  // A login link from an email lands here: supabase-js reads a valid one from the URL and signs in (handled above);
+  // an expired or used one comes back as #error=…, which we explain instead of failing silently.
+  const hash = useSyncExternalStore(
+    (onChange) => (window.addEventListener("hashchange", onChange), () => window.removeEventListener("hashchange", onChange)),
+    () => window.location.hash,
+    () => "",
+  );
+  const linkError = new URLSearchParams(hash.slice(1)).get("error_code");
+
   if (!lmsReady) return <>{fallback}</>;
 
   return (
@@ -31,7 +40,8 @@ export default function LoginForm({ fallback }: { fallback: React.ReactNode }) {
             <p className="muted">New here? Just enter your email — we’ll create your account.</p>
           </div>
           <div className="card">
-            {me && home === "/" ? <Notice>This account doesn’t have access here. Please contact FinFun.</Notice> : <CodeLogin />}
+            {linkError && !me && <Notice kind="error">That login link has expired or was already used. Enter your email to get a new code.</Notice>}
+            {me && home === "/" ? <Notice>This account doesn’t have access here. Please contact FinFun.</Notice> : <CodeLogin next={next} />}
           </div>
         </div>
       </div>
@@ -39,7 +49,7 @@ export default function LoginForm({ fallback }: { fallback: React.ReactNode }) {
   );
 }
 
-function CodeLogin() {
+function CodeLogin({ next }: { next: string | null }) {
   const [email, setEmail] = useState("");
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [code, setCode] = useState("");
@@ -50,7 +60,9 @@ function CodeLogin() {
     run(async () => {
       const address = email.trim().toLowerCase();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address)) throw new Error("Please enter a valid email address.");
-      const { error } = await supabase.auth.signInWithOtp({ email: address });
+      // If the email carries a link instead of the code, it brings the person back to this page (and on to `next`).
+      const back = `${window.location.origin}/login${next ? `?next=${encodeURIComponent(next)}` : ""}`;
+      const { error } = await supabase.auth.signInWithOtp({ email: address, options: { emailRedirectTo: back } });
       if (error) throw new Error(error.status === 429 ? "Too many codes sent. Please wait a minute and try again." : error.message);
       setSentTo(address);
     });
