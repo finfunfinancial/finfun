@@ -1,31 +1,29 @@
 # FinFun LMS
 
-Supabase backend (`supabase/`) and web app (`web/`) for the FinFun learning platform: parents, children, enrolment and payments, live batches, progress, rubric and certificates. Built to the *FinFun LMS Backend PRD*; requirement IDs in comments (ACC-1, PAY-3…) point to it.
+Supabase backend for finfun.club accounts: buyers, their children's courses, payments, live batches, lessons, quizzes and certificates. Built to the *FinFun LMS Backend PRD*; requirement IDs in comments (ACC-1, PAY-3…) point to it.
 
-## Web app (`web/`)
-One Next.js app for everyone; after login each role lands in its own area:
+The screens live in the website itself (the Next.js app one folder up), not in a separate app:
 
-| Area | Who | What |
+| Page | Who | What |
 | --- | --- | --- |
-| `/admin` | FinFun admins | Dashboard, programs and curriculum (lessons, files, quizzes), batches and sessions, people (PIN resets, staff), orders (mark offline payments paid, CSV), coupons, schools (sections, bulk student logins), audit log |
-| `/teach` | Trainers, school teachers | Upcoming classes, attendance, rubric levels |
-| `/parent` | Parents | Children and their logins, enrol and pay, pick a batch, progress report, certificates |
-| `/learn` | Students | Next class + join button, lessons, quizzes, FinCoins, badges, recordings, certificates |
+| `/login` | Everyone | Sign up or log in with mobile or email + a 6-digit code |
+| `/enrol` | Buyers | Pick or add the child (first name + grade), coupon, pay; then the course appears in My courses |
+| `/my-courses` | Buyers | Courses they bought: pick a class time, next live class, lessons and quizzes, badges, recordings, certificate |
+| `/admin` | FinFun admins | Dashboard, courses and lessons (files, quizzes), batches and classes (Zoom, recordings, attendance, certificates), users, orders (mark offline payments paid, CSV), coupons |
 | `/verify/<code>` | Anyone | Public certificate check |
 
-```bash
-cd web && npm install
-npm run dev            # http://localhost:3300 — reads web/.env.local (see web/.env.example)
-```
+One login per buyer: the child is a learner record under the buyer's account, with no login of its own.
 
-Local test logins (after `supabase db reset`, run `node scripts/dev-users.mjs`):
-- Admin `admin@finfun.test`, trainer `trainer@finfun.test` — the 6-digit code arrives in Mailpit, http://127.0.0.1:54324
-- Parent: phone `99999 00001` or `99999 00002`, code `123456`
-- Students: create one as a parent (or reset a PIN in Admin → People) and log in on the Student tab
+Website settings (`site/.env.local`, and the website's Vercel project):
+- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_KEY` — production URL + publishable key. Without them `/login` shows the old page and `/admin` says "being set up".
+- `NEXT_PUBLIC_ONLINE_CHECKOUT=on` — makes `/enrol` the log-in-and-pay checkout. Leave it off until parents can receive login codes (MSG91 SMS or your own email provider in Supabase); until then the old enrol form keeps collecting leads.
 
-Hosting: deploy `web/` to Vercel with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_KEY` (production URL + publishable key), then add the site URL in Supabase → Authentication → URL Configuration.
+Local test logins (after `supabase db reset`, run `node scripts/dev-users.mjs`), with the website running on http://localhost:3100:
+- Admin `admin@finfun.test` — the 6-digit code arrives in Mailpit, http://127.0.0.1:54324
+- Buyers: phone `99999 00001` or `99999 00002`, code `123456`
+- Coupon `TESTFREE` enrols for free, so you can try My courses without payments
 
-First production admin: log in once at the web app with the admin's email, then run in the SQL Editor:
+First production admin: create the user in Supabase → Authentication → Users (auto-confirm), then run in the SQL Editor:
 ```sql
 update auth.users set raw_app_meta_data = raw_app_meta_data || '{"role":"admin"}' where email = 'technology@finfun.club';
 ```
@@ -75,19 +73,18 @@ Apps read data directly with `supabase-js`; row-level security decides what each
 
 | Function | Who | Does |
 | --- | --- | --- |
-| `children` | Parent | Add a child (creates their login, records consent); `children/<id>/reset-pin` |
-| `student-login` | Anyone | Username + PIN → session; 5 wrong PINs lock it for 15 minutes |
-| `enrolments` | Parent | Price with coupon (`dryRun`), then create the enrolment and Razorpay order |
+| `student-login` | School students (not used yet) | Username + PIN → session; 5 wrong PINs lock it for 15 minutes |
+| `enrolments` | Buyer | Price with coupon (`dryRun`); saves a new child with consent; creates the enrolment and Razorpay order |
 | `razorpay-webhook` | Razorpay | Marks the order paid and activates the enrolment |
-| `join-session` | Student | Checks the timetable, returns what the Zoom Meeting SDK needs to join in-page |
+| `join-session` | Buyer | Checks the child's timetable, returns what the Zoom Meeting SDK needs to join in-page |
 | `admin` | Admin | Add staff, change roles, reset PINs, mark offline payments paid, bulk-import school students |
 
 Database functions callable from the apps: `assign_batch` (parent picks a batch; waitlists when full), `complete_item` and `submit_quiz` (students; quizzes are graded on the server and the answer key is never readable), `complete_session` (trainers), `generate_sessions` and `issue_certificates` (admins), `verify_certificate` (public). Points (FinCoins) and badges are awarded automatically on attendance, activities and quizzes.
 
 Reading `sessions`: list the columns you need — the Zoom meeting id and passcode are hidden from apps, so `select('*')` is refused.
 
-## Students have no email or phone
-Each child is a hidden Supabase Auth user (`<username>@students.finfun.club`, never emailed). Their password is an HMAC of username + PIN with `STUDENT_PIN_PEPPER`, so PINs can only be tried through `student-login` and its lockout. Never change the pepper without resetting every PIN.
+## School student logins (not used yet)
+The school tools (sections, bulk logins) are kept in the backend for later. Each child is a hidden Supabase Auth user (`<username>@students.finfun.club`, never emailed). Their password is an HMAC of username + PIN with `STUDENT_PIN_PEPPER`, so PINs can only be tried through `student-login` and its lockout. Never change the pepper without resetting every PIN.
 
 ## Status
 Working: schema and RLS, parent/child accounts, student login, enrolment with coupons, free (₹0) enrolments, offline payments marked by admins, batch choice with waitlist, session calendar, attendance, rubric, lessons and quizzes, FinCoins and badges, certificates with public verification, school sections with bulk logins, admin portal, trainer, parent and student apps.

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EnrolForm } from "@/components/Forms";
+import Checkout from "@/components/lms/Checkout";
 import Img from "@/components/Img";
 import { inr } from "@/components/Sections";
 import { programs } from "@/lib/content";
@@ -10,6 +11,11 @@ export const metadata: Metadata = {
   description: "Enroll your child in FinFun Basic (grades 3–5), FinFun Pro (grades 6–7) or FinFun Advantage (grades 8–10). Pay securely by UPI, card or netbanking.",
   alternates: { canonical: "/enrol" },
 };
+
+// Online checkout (log in → pay → My courses) is switched on per deployment once parents can receive login codes
+// (SMS or email set up in Supabase). Until then the lead form below keeps collecting enrolments.
+const onlineCheckout =
+  process.env.NEXT_PUBLIC_ONLINE_CHECKOUT === "on" && !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
 export default async function Enroll({ searchParams }: PageProps<"/enrol">) {
   const { program, coupon } = await searchParams;
@@ -38,9 +44,17 @@ export default async function Enroll({ searchParams }: PageProps<"/enrol">) {
           </div>
           <p className="fine mt">Only a parent or guardian can enroll. We collect just your child’s first name and grade, and never share or display it publicly.</p>
         </div>
-        <div className="card">
-          <EnrolForm program={typeof program === "string" ? program : undefined} coupon={typeof coupon === "string" ? coupon : undefined} />
-        </div>
+        {onlineCheckout ? (
+          <div className="portal">
+            <div className="card">
+              <Checkout program={typeof program === "string" ? program : undefined} coupon={typeof coupon === "string" ? coupon : undefined} />
+            </div>
+          </div>
+        ) : (
+          <div className="card">
+            <EnrolForm program={typeof program === "string" ? program : undefined} coupon={typeof coupon === "string" ? coupon : undefined} />
+          </div>
+        )}
       </div>
     </section>
   );

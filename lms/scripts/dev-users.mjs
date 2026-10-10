@@ -11,7 +11,6 @@ if (!env.API_URL?.includes("127.0.0.1")) throw new Error("dev-users only runs ag
 
 const users = [
   { email: "admin@finfun.test", role: "admin", name: "Test Admin" },
-  { email: "trainer@finfun.test", role: "trainer", name: "Test Trainer" },
 ];
 for (const u of users) {
   const res = await fetch(`${env.API_URL}/auth/v1/admin/users`, {

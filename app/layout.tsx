@@ -3,9 +3,11 @@ import { Architects_Daughter, Nunito, Patrick_Hand_SC } from "next/font/google";
 import Analytics from "@/components/Analytics";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import SiteChrome from "@/components/SiteChrome";
 import WhatsApp from "@/components/WhatsApp";
 import { site } from "@/lib/content";
 import "./globals.css";
+import "./portal.css";
 
 const hand = Architects_Daughter({ weight: "400", subsets: ["latin"], variable: "--font-hand", display: "swap" });
 const caps = Patrick_Hand_SC({ weight: "400", subsets: ["latin"], variable: "--font-caps", display: "swap" });
@@ -30,10 +32,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <Header />
+        <SiteChrome>
+          <Header />
+        </SiteChrome>
         <main id="main">{children}</main>
-        <Footer />
-        <WhatsApp />
+        <SiteChrome>
+          <Footer />
+          <WhatsApp />
+        </SiteChrome>
         <Analytics />
       </body>
     </html>
