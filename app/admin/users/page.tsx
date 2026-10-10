@@ -140,7 +140,7 @@ function AddAdmin({ onDone }: { onDone: () => void }) {
             <label>Full name<input name="name" required /></label>
             <label>Email<input name="email" type="email" required /></label>
           </div>
-          <p className="fine" style={{ margin: 0 }}>They log in at finfun.club/login with this email and a 6-digit code.</p>
+          <p className="fine" style={{ margin: 0 }}>They go to finfun.club/login, click “Forgot password?” and set their password from the email we send.</p>
           <Notice kind="error">{error}</Notice>
           <div className="row end"><button className="btn" disabled={busy}>{busy ? "Adding…" : "Add admin"}</button></div>
         </form>

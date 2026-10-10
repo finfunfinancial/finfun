@@ -1,6 +1,6 @@
 // Creates local staff test accounts (local stack only). Run after `supabase db reset`:
 //   node scripts/dev-users.mjs
-// Then log in at http://localhost:3300 with the email; the 6-digit code arrives in Mailpit (http://127.0.0.1:54324).
+// Then log in at http://localhost:3100/login with the email and the local test password below.
 import { execSync } from "node:child_process";
 
 const env = Object.fromEntries(
@@ -10,13 +10,13 @@ const env = Object.fromEntries(
 if (!env.API_URL?.includes("127.0.0.1")) throw new Error("dev-users only runs against the local stack");
 
 const users = [
-  { email: "admin@finfun.test", role: "admin", name: "Test Admin" },
+  { email: "admin@finfun.test", password: "finfun-local-admin", role: "admin", name: "Test Admin" },
 ];
 for (const u of users) {
   const res = await fetch(`${env.API_URL}/auth/v1/admin/users`, {
     method: "POST",
     headers: { apikey: env.SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SERVICE_ROLE_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ email: u.email, email_confirm: true, app_metadata: { role: u.role } }),
+    body: JSON.stringify({ email: u.email, password: u.password, email_confirm: true, app_metadata: { role: u.role } }),
   });
   const body = await res.json();
   if (!res.ok && body.error_code !== "email_exists") throw new Error(JSON.stringify(body));

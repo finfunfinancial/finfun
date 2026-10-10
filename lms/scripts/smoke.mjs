@@ -23,20 +23,14 @@ async function call(path, { token, body, method = body ? "POST" : "GET" } = {}) 
 const fn = (name, body, token) => call(`/functions/v1/${name}`, { body, token });
 const rpc = (name, body, token) => call(`/rest/v1/rpc/${name}`, { body, token });
 
-/** Email login exactly like the website: request a code, read it from the local Mailpit inbox, verify it. */
+/** Sign up then log in with email + password, exactly like the website (local email confirmation is off). */
 async function buyerLogin(email) {
-  const sentAfter = Date.now() - 1000;
-  const sent = await call("/auth/v1/otp", { body: { email } });
-  assert.equal(sent.status, 200, `could not send a code to ${email}: ${JSON.stringify(sent.data)}`);
-  let token;
-  for (let i = 0; i < 20 && !token; i++) {
-    await new Promise((r) => setTimeout(r, 250));
-    const inbox = await fetch(`${env.MAILPIT_URL}/api/v1/search?query=${encodeURIComponent(`to:${email}`)}`).then((r) => r.json());
-    const mail = inbox.messages?.find((m) => Date.parse(m.Created) >= sentAfter);
-    token = mail?.Snippet.match(/\b(\d{6})\b/)?.[1];
-  }
-  assert.ok(token, `no login code reached ${email}`);
-  const { data } = await call("/auth/v1/verify", { body: { type: "email", email, token } });
+  const password = "local-test-password";
+  const signup = await call("/auth/v1/signup", { body: { email, password } });
+  assert.equal(signup.status, 200, `could not sign up ${email}: ${JSON.stringify(signup.data)}`);
+  const wrong = await call("/auth/v1/token?grant_type=password", { body: { email, password: "not-the-password" } });
+  assert.notEqual(wrong.status, 200, "a wrong password must be refused");
+  const { data } = await call("/auth/v1/token?grant_type=password", { body: { email, password } });
   assert.ok(data.access_token, `buyer ${email} could not log in`);
   return data.access_token;
 }
@@ -48,7 +42,7 @@ assert.deepEqual(programs.data.map((p) => p.slug), ["basic", "pro", "advantage"]
 step("catalog is public: 3 programs");
 
 const buyer = await buyerLogin("buyer1@finfun.test");
-step("buyer signs up / logs in with an emailed 6-digit code");
+step("buyer signs up and logs in with email + password (wrong password refused)");
 
 const phone = await call("/auth/v1/otp", { body: { phone: "919999900001" } });
 assert.notEqual(phone.status, 200, "phone login must be switched off");

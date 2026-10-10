@@ -20,8 +20,8 @@ export default function Checkout({ program: initialProgram, coupon: initialCoupo
     return (
       <div className="stack">
         <h2 style={{ margin: 0 }}>Log in or sign up to enroll</h2>
-        <p className="muted" style={{ margin: 0 }}>It takes a minute: enter your email, type the code we send, and you’re in. Your course then appears under My courses.</p>
-        <Link className="btn blue lg" href={`/login?next=${encodeURIComponent(back)}`}>Continue with email</Link>
+        <p className="muted" style={{ margin: 0 }}>It takes a minute: create an account with your email and a password, or log in if you have one. Your course then appears under My courses.</p>
+        <Link className="btn blue lg" href={`/login?next=${encodeURIComponent(back)}`}>Log in or sign up</Link>
       </div>
     );
   }

@@ -6,21 +6,26 @@ import { homeFor, lmsReady, useMe } from "@/lib/lms/auth";
 import { supabase } from "@/lib/lms/supabase";
 import { useAction } from "@/lib/lms/use-data";
 
-/** Sign up or log in with an email and a 6-digit code (Supabase Auth, email only) — a new email creates the account.
+type Mode = "login" | "signup" | "forgot";
+const MIN_PASSWORD = 8;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Email + password accounts (Supabase Auth). Log in, sign up, or reset a forgotten password.
  *  Afterwards admins go to /admin and everyone else to `next` (e.g. back to checkout) or My courses. */
 export default function LoginForm({ fallback }: { fallback: React.ReactNode }) {
   const me = useMe();
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next");
+  const resetting = params.get("reset") === "1"; // arrived from a "reset your password" email
   const home = me ? (me.role === "admin" ? "/admin" : next?.startsWith("/") ? next : homeFor(me.role)) : null;
+  const [mode, setMode] = useState<Mode>("login");
 
   useEffect(() => {
-    if (home && home !== "/") router.replace(home);
-  }, [home, router]);
+    if (home && home !== "/" && !resetting) router.replace(home);
+  }, [home, resetting, router]);
 
-  // A login link from an email lands here: supabase-js reads a valid one from the URL and signs in (handled above);
-  // an expired or used one comes back as #error=…, which we explain instead of failing silently.
+  // Links in Supabase emails (confirm sign-up, reset password) land here; an expired or used one comes back as #error=….
   const hash = useSyncExternalStore(
     (onChange) => (window.addEventListener("hashchange", onChange), () => window.removeEventListener("hashchange", onChange)),
     () => window.location.hash,
@@ -30,18 +35,32 @@ export default function LoginForm({ fallback }: { fallback: React.ReactNode }) {
 
   if (!lmsReady) return <>{fallback}</>;
 
+  const title = resetting && me ? "Choose a new password" : mode === "signup" ? "Create your account" : mode === "forgot" ? "Reset your password" : "Log in";
   return (
     <div className="portal">
       <div className="login">
         <div className="login-box">
           <div className="login-head">
             <img src="/a/sticker/10-hi-im-rupi.webp" alt="" width={110} height={110} />
-            <h1>Log in or sign up</h1>
-            <p className="muted">New here? Just enter your email — we’ll create your account.</p>
+            <h1>{title}</h1>
           </div>
           <div className="card">
-            {linkError && !me && <Notice kind="error">That login link has expired or was already used. Enter your email to get a new code.</Notice>}
-            {me && home === "/" ? <Notice>This account doesn’t have access here. Please contact FinFun.</Notice> : <CodeLogin next={next} />}
+            {linkError && !me && <Notice kind="error">That email link has expired or was already used. Please try again.</Notice>}
+            {resetting && me ? (
+              <NewPassword onDone={() => router.replace(home && home !== "/" ? home : "/")} />
+            ) : me && home === "/" ? (
+              <Notice>This account doesn’t have access here. Please contact FinFun.</Notice>
+            ) : (
+              <>
+                {mode !== "forgot" && (
+                  <div className="tabs" role="group" aria-label="Log in or sign up">
+                    <button aria-pressed={mode === "login"} onClick={() => setMode("login")}>Log in</button>
+                    <button aria-pressed={mode === "signup"} onClick={() => setMode("signup")}>Sign up</button>
+                  </div>
+                )}
+                <PasswordForm mode={mode} setMode={setMode} next={next} />
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -49,55 +68,86 @@ export default function LoginForm({ fallback }: { fallback: React.ReactNode }) {
   );
 }
 
-function CodeLogin({ next }: { next: string | null }) {
+function PasswordForm({ mode, setMode, next }: { mode: Mode; setMode: (m: Mode) => void; next: string | null }) {
   const [email, setEmail] = useState("");
-  const [sentTo, setSentTo] = useState<string | null>(null);
-  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
+  const [done, setDone] = useState<string | null>(null);
   const { busy, error, run } = useAction();
+  const back = (extra = "") => `${window.location.origin}/login?${new URLSearchParams({ ...(next && { next }), ...(extra && { [extra]: "1" }) })}`;
 
-  const send = (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    setDone(null);
     run(async () => {
       const address = email.trim().toLowerCase();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address)) throw new Error("Please enter a valid email address.");
-      // If the email carries a link instead of the code, it brings the person back to this page (and on to `next`).
-      const back = `${window.location.origin}/login${next ? `?next=${encodeURIComponent(next)}` : ""}`;
-      const { error } = await supabase.auth.signInWithOtp({ email: address, options: { emailRedirectTo: back } });
-      if (error) throw new Error(error.status === 429 ? "Too many codes sent. Please wait a minute and try again." : error.message);
-      setSentTo(address);
+      if (!EMAIL.test(address)) throw new Error("Please enter a valid email address.");
+
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(address, { redirectTo: back("reset") });
+        if (error) throw new Error(error.status === 429 ? "Too many emails sent. Please wait a few minutes and try again." : error.message);
+        return setDone(`If ${address} has an account, we’ve emailed a link to reset the password.`);
+      }
+
+      if (password.length < MIN_PASSWORD) throw new Error(`Passwords need at least ${MIN_PASSWORD} characters.`);
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({ email: address, password, options: { emailRedirectTo: back() } });
+        if (error) throw new Error(error.message);
+        // With "Confirm email" on in Supabase there's no session yet: the person confirms from their inbox first.
+        if (!data.session) setDone(`We’ve emailed ${address} a link to confirm your account. Click it, then log in here.`);
+        return;
+      }
+      const { error } = await supabase.auth.signInWithPassword({ email: address, password });
+      if (error) {
+        throw new Error(/confirm/i.test(error.message) ? "Please confirm your email first — check your inbox for our link." : "That email or password isn’t right.");
+      }
     });
   };
 
-  const verify = (e: React.FormEvent) => {
+  return (
+    <form className="stack" onSubmit={submit}>
+      <label>
+        Email
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" required />
+      </label>
+      {mode !== "forgot" && (
+        <label>
+          Password
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} minLength={MIN_PASSWORD} required
+            autoComplete={mode === "signup" ? "new-password" : "current-password"} />
+        </label>
+      )}
+      {mode === "signup" && <p className="fine" style={{ margin: 0 }}>At least {MIN_PASSWORD} characters.</p>}
+      <Notice kind="error">{error}</Notice>
+      <Notice kind="ok">{done}</Notice>
+      <button className="btn blue lg" disabled={busy}>
+        {busy ? "Please wait…" : mode === "signup" ? "Create account" : mode === "forgot" ? "Email me a reset link" : "Log in"}
+      </button>
+      {mode === "login" && <button type="button" className="link" onClick={() => setMode("forgot")}>Forgot password?</button>}
+      {mode === "forgot" && <button type="button" className="link" onClick={() => setMode("login")}>Back to log in</button>}
+    </form>
+  );
+}
+
+function NewPassword({ onDone }: { onDone: () => void }) {
+  const [password, setPassword] = useState("");
+  const { busy, error, run } = useAction();
+  const save = (e: React.FormEvent) => {
     e.preventDefault();
     run(async () => {
-      const { error } = await supabase.auth.verifyOtp({ email: sentTo!, token: code.trim(), type: "email" });
-      if (error) throw new Error("That code isn’t right, or it has expired.");
+      if (password.length < MIN_PASSWORD) throw new Error(`Passwords need at least ${MIN_PASSWORD} characters.`);
+      const { error } = await supabase.auth.updateUser({ password });
+      if (error) throw new Error(error.message);
+      onDone();
     });
   };
-
-  if (!sentTo) {
-    return (
-      <form className="stack" onSubmit={send}>
-        <label>
-          Email
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" required />
-        </label>
-        <Notice kind="error">{error}</Notice>
-        <button className="btn blue lg" disabled={busy}>{busy ? "Sending…" : "Email me a code"}</button>
-      </form>
-    );
-  }
   return (
-    <form className="stack" onSubmit={verify}>
-      <p>We emailed a 6-digit code to <strong>{sentTo}</strong>. Check your spam folder if it isn’t there in a minute.</p>
+    <form className="stack" onSubmit={save}>
       <label>
-        Code
-        <input value={code} onChange={(e) => setCode(e.target.value)} inputMode="numeric" autoComplete="one-time-code" maxLength={6} required autoFocus />
+        New password
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} minLength={MIN_PASSWORD} autoComplete="new-password" required autoFocus />
       </label>
       <Notice kind="error">{error}</Notice>
-      <button className="btn blue lg" disabled={busy}>{busy ? "Checking…" : "Log in"}</button>
-      <button type="button" className="link" onClick={() => setSentTo(null)}>Use a different email</button>
+      <button className="btn blue lg" disabled={busy}>{busy ? "Saving…" : "Save new password"}</button>
     </form>
   );
 }

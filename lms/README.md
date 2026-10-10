@@ -6,7 +6,7 @@ The screens live in the website itself (the Next.js app one folder up), not in a
 
 | Page | Who | What |
 | --- | --- | --- |
-| `/login` | Everyone | Sign up or log in with email + a 6-digit code (Supabase Auth, email only) |
+| `/login` | Everyone | Sign up or log in with email + password (Supabase Auth); “Forgot password?” emails a reset link |
 | `/enrol` | Buyers | Pick or add the child (first name + grade), coupon, pay; then the course appears in My courses |
 | `/my-courses` | Buyers | Courses they bought: pick a class time, next live class, lessons and quizzes, badges, recordings, certificate |
 | `/admin` | FinFun admins | Dashboard, courses and lessons (files, quizzes), batches and classes (Zoom, recordings, attendance, certificates), users, orders (mark offline payments paid, CSV), coupons |
@@ -19,14 +19,14 @@ Website settings (`site/.env.local`, and the website's Vercel project):
 - `NEXT_PUBLIC_ONLINE_CHECKOUT=on` — makes `/enrol` the log-in-and-pay checkout. Leave it off until Supabase sends email through your own SMTP provider (the built-in mailer only reaches your own team, about 2 emails an hour); until then the old enrol form keeps collecting leads.
 
 Local test logins (after `supabase db reset`, run `node scripts/dev-users.mjs`), with the website running on http://localhost:3100:
-- Admin `admin@finfun.test`; buyers: any email (e.g. `buyer1@finfun.test`) — every login code arrives in Mailpit, http://127.0.0.1:54324
+- Admin `admin@finfun.test`, password `finfun-local-admin`; buyers: sign up with any email and password (no confirmation locally). Password-reset emails arrive in Mailpit, http://127.0.0.1:54324
 - Coupon `TESTFREE` enrols for free, so you can try My courses without payments
 
 First production admin: create the user in Supabase → Authentication → Users (auto-confirm), then run in the SQL Editor:
 ```sql
 update auth.users set raw_app_meta_data = raw_app_meta_data || '{"role":"admin"}' where email = 'technology@finfun.club';
 ```
-Production login emails must show the code: Authentication → Email Templates → "Magic Link" and "Confirm signup" → use `supabase/templates/login-code.html`.
+Production: Authentication → URL Configuration → Site URL `https://www.finfun.club`, Redirect URLs `https://www.finfun.club/**` and `https://finfun.club/**` (confirmation and reset links come back to /login). Until custom SMTP is set, turn off "Confirm email" (Sign In / Providers → Email), because the built-in mailer only reaches your own team.
 
 ## Run the backend locally
 Needs Docker Desktop running and the Supabase CLI (`brew install supabase/tap/supabase`).
@@ -41,7 +41,7 @@ node --test supabase/functions/_shared/logic.test.ts
 `supabase start` prints the local URLs and keys. Studio (the database UI) is at http://127.0.0.1:54323.
 
 Local test logins:
-- Buyer: any email; the login code arrives in Mailpit (http://127.0.0.1:54324).
+- Buyer: sign up with any email and password at http://localhost:3100/login.
 - Coupons: `FESTIVE` (10%, placeholder) and `TESTFREE` (100%, skips payment).
 
 End-to-end check (local only): `supabase db reset && node scripts/smoke.mjs`.
@@ -54,7 +54,7 @@ supabase db push                                   # applies migrations; seed.sq
 supabase secrets set STUDENT_PIN_PEPPER=$(openssl rand -hex 32)   # once, never change it afterwards
 supabase functions deploy
 ```
-Never run `supabase config push`: `config.toml` holds local-only settings (Mailpit, no email confirmation). Set production Auth in the dashboard: Email provider on, Phone off, SMTP, email templates, site URL.
+Never run `supabase config push`: `config.toml` holds local-only settings (Mailpit, no email confirmation). Set production Auth in the dashboard: Email provider on, Phone off, minimum password length 8, SMTP, site URL.
 
 ## Where things live
 | What | File |
