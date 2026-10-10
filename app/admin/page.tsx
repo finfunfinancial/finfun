@@ -38,11 +38,11 @@ export default function Dashboard() {
         {(d) => (
           <>
             <div className="stats">
-              <Stat label="Enrolments today" value={d.newToday} />
+              <Stat label="Enrollments today" value={d.newToday} />
               <Stat label="Active students" value={d.active} />
               <Stat label="Revenue this month" value={inr(d.revenue)} />
-              <Stat label="Unpaid enrolments" value={<Link href="/admin/orders">{d.unpaid}</Link>} warn={d.unpaid > 0} />
-              <Stat label="Waitlisted" value={d.waitlisted} warn={d.waitlisted > 0} />
+              <Stat label="Unpaid enrollments" value={<Link href="/admin/orders">{d.unpaid}</Link>} warn={d.unpaid > 0} />
+              <Stat label="Waitlisted" value={<Link href="/admin/waitlist">{d.waitlisted}</Link>} warn={d.waitlisted > 0} />
               <Stat label="Batches 80%+ full" value={d.full.length} warn={d.full.length > 0} />
             </div>
 
@@ -69,7 +69,7 @@ export default function Dashboard() {
               </section>
 
               <section className="card">
-                <h2>Latest enrolments</h2>
+                <h2>Latest enrollments</h2>
                 {d.recent.length ? (
                   <ul className="stack" style={{ listStyle: "none", padding: 0, margin: 0 }}>
                     {d.recent.map((e: any) => (
@@ -79,7 +79,7 @@ export default function Dashboard() {
                       </li>
                     ))}
                   </ul>
-                ) : <Empty>No enrolments yet.</Empty>}
+                ) : <Empty>No enrollments yet.</Empty>}
               </section>
             </div>
           </>

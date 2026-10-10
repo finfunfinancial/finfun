@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Gate, lmsReady, useUser } from "@/lib/lms/auth";
 import { supabase } from "@/lib/lms/supabase";
+import { Icon } from "./icons";
 
 /** Scopes the portal styles (app/portal.css) and covers deployments where accounts aren't switched on yet. */
 export function Portal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
@@ -18,22 +19,30 @@ export function Portal({ children, className = "" }: { children: React.ReactNode
 }
 
 const adminNav = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/programs", label: "Courses" },
-  { href: "/admin/batches", label: "Batches" },
-  { href: "/admin/users", label: "Users" },
-  { href: "/admin/orders", label: "Orders" },
-  { href: "/admin/coupons", label: "Coupons" },
-  { href: "/admin/audit", label: "Audit log" },
-];
+  { href: "/admin", label: "Dashboard", icon: "dashboard" },
+  { href: "/admin/students", label: "Students", icon: "students" },
+  { href: "/admin/enrollments", label: "Enrollments", icon: "enrollments" },
+  { href: "/admin/waitlist", label: "Waitlist", icon: "waitlist" },
+  { href: "/admin/programs", label: "Courses", icon: "courses" },
+  { href: "/admin/batches", label: "Batches", icon: "batches" },
+  { href: "/admin/sessions", label: "Live Sessions", icon: "live" },
+  { href: "/admin/orders", label: "Orders", icon: "orders" },
+  { href: "/admin/coupons", label: "Coupons", icon: "coupons" },
+  { href: "/admin/users", label: "Users", icon: "users" },
+  { href: "/admin/audit", label: "Audit log", icon: "audit" },
+] as const;
 
-/** Admin portal frame: its own top bar instead of the marketing header. */
+/** Admin portal frame: a left sidebar (logo, sections, account) instead of the marketing header. */
 export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
-    <Portal className="app">
+    <Portal className="admin">
       <Gate roles={["admin"]}>
-        <TopBar />
-        <div className="page">{children}</div>
+        <div className="admin-frame">
+          <Sidebar />
+          <div className="admin-main">
+            <div className="page">{children}</div>
+          </div>
+        </div>
       </Gate>
     </Portal>
   );
@@ -50,7 +59,7 @@ export function BuyerPage({ children }: { children: React.ReactNode }) {
   );
 }
 
-function TopBar() {
+function Sidebar() {
   const me = useUser();
   const path = usePathname();
   const router = useRouter();
@@ -58,24 +67,37 @@ function TopBar() {
     await supabase.auth.signOut();
     router.replace("/login");
   };
+  const name = me.full_name || me.email?.split("@")[0] || "Admin";
   return (
-    <header className="topbar">
-      <Link href="/admin" className="brand">
-        <img src="/a/logo.webp" alt="FinFun" width={118} height={30} />
+    <aside className="sidebar">
+      <Link href="/admin" className="sidebar-logo">
+        <img src="/a/logo.webp" alt="FinFun admin" width={118} height={30} />
       </Link>
-      <nav>
-        {adminNav.map((n) => (
-          <Link key={n.href} href={n.href} aria-current={(n.href === "/admin" ? path === n.href : path.startsWith(n.href)) ? "page" : undefined}>
-            {n.label}
-          </Link>
-        ))}
+      <nav aria-label="Admin">
+        {adminNav.map((n) => {
+          const active = n.href === "/admin" ? path === n.href : path.startsWith(n.href);
+          return (
+            <Link key={n.href} href={n.href} className="side-link" aria-current={active ? "page" : undefined}>
+              <Icon name={n.icon} />
+              <span>{n.label}</span>
+            </Link>
+          );
+        })}
       </nav>
-      <div className="who">
-        <Link href="/">View site</Link>
-        <span>{me.full_name || me.email}</span>
-        <button className="link" onClick={signOut}>Log out</button>
+      <div className="sidebar-foot">
+        <div className="me">
+          <span className="avatar" aria-hidden="true">{name[0].toUpperCase()}</span>
+          <span className="me-text">
+            <strong>{name}</strong>
+            <span>{me.email}</span>
+          </span>
+        </div>
+        <div className="row" style={{ gap: 4 }}>
+          <Link href="/" className="side-link small"><Icon name="site" /><span>View site</span></Link>
+          <button className="side-link small" onClick={signOut}><Icon name="logout" /><span>Log out</span></button>
+        </div>
       </div>
-    </header>
+    </aside>
   );
 }
 
