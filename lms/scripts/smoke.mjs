@@ -23,10 +23,21 @@ async function call(path, { token, body, method = body ? "POST" : "GET" } = {}) 
 const fn = (name, body, token) => call(`/functions/v1/${name}`, { body, token });
 const rpc = (name, body, token) => call(`/rest/v1/rpc/${name}`, { body, token });
 
-async function buyerLogin(phone) {
-  await call("/auth/v1/otp", { body: { phone } });
-  const { data } = await call("/auth/v1/verify", { body: { type: "sms", phone, token: "123456" } });
-  assert.ok(data.access_token, `buyer ${phone} could not log in`);
+/** Email login exactly like the website: request a code, read it from the local Mailpit inbox, verify it. */
+async function buyerLogin(email) {
+  const sentAfter = Date.now() - 1000;
+  const sent = await call("/auth/v1/otp", { body: { email } });
+  assert.equal(sent.status, 200, `could not send a code to ${email}: ${JSON.stringify(sent.data)}`);
+  let token;
+  for (let i = 0; i < 20 && !token; i++) {
+    await new Promise((r) => setTimeout(r, 250));
+    const inbox = await fetch(`${env.MAILPIT_URL}/api/v1/search?query=${encodeURIComponent(`to:${email}`)}`).then((r) => r.json());
+    const mail = inbox.messages?.find((m) => Date.parse(m.Created) >= sentAfter);
+    token = mail?.Snippet.match(/\b(\d{6})\b/)?.[1];
+  }
+  assert.ok(token, `no login code reached ${email}`);
+  const { data } = await call("/auth/v1/verify", { body: { type: "email", email, token } });
+  assert.ok(data.access_token, `buyer ${email} could not log in`);
   return data.access_token;
 }
 
@@ -36,8 +47,12 @@ const programs = await call("/rest/v1/programs?select=slug,price_paise&order=pri
 assert.deepEqual(programs.data.map((p) => p.slug), ["basic", "pro", "advantage"]);
 step("catalog is public: 3 programs");
 
-const buyer = await buyerLogin("919999900001");
-step("buyer signs up / logs in with phone OTP");
+const buyer = await buyerLogin("buyer1@finfun.test");
+step("buyer signs up / logs in with an emailed 6-digit code");
+
+const phone = await call("/auth/v1/otp", { body: { phone: "919999900001" } });
+assert.notEqual(phone.status, 200, "phone login must be switched off");
+step("phone login is switched off (email only)");
 
 const aarav = { firstName: "Aarav", grade: 6, consent: true };
 let r = await fn("enrolments", { program: "advantage", learner: aarav, dryRun: true }, buyer);
@@ -98,7 +113,7 @@ r = await call("/rest/v1/quiz_keys?select=answers", { token: buyer });
 assert.deepEqual(r.data, []);
 step("buyer does an activity and a quiz for their child; the answer key stays hidden");
 
-const other = await buyerLogin("919999900002");
+const other = await buyerLogin("buyer2@finfun.test");
 r = await call("/rest/v1/students?select=id", { token: other });
 assert.deepEqual(r.data, []);
 r = await rpc("assign_batch", { p_enrolment: enrolmentId, p_batch: batches.data[0].id }, other);

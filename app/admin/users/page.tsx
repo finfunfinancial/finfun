@@ -14,7 +14,7 @@ export default function Users() {
   const [search, setSearch] = useState("");
   return (
     <>
-      <PageHead title="Users" sub="Find a buyer by phone, email or name, and see what they bought." />
+      <PageHead title="Users" sub="Find a buyer by email or name, and see what they bought." />
       <div className="spread" style={{ marginBottom: 16 }}>
         <div className="tabs" style={{ width: 300, margin: 0 }}>
           <button aria-pressed={tab === "buyers"} onClick={() => setTab("buyers")}>Buyers</button>

@@ -31,7 +31,7 @@ function MyCourses() {
 
   return (
     <>
-      <PageHead title="My courses" sub={<>Logged in as {me.phone ? `+${me.phone}` : me.email} · <LogOut /></>}>
+      <PageHead title="My courses" sub={<>Logged in as {me.email} · <LogOut /></>}>
         <Link className="btn" href="/enrol">Buy a course</Link>
       </PageHead>
       <Loaded data={data} error={error}>

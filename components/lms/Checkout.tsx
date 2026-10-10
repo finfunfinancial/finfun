@@ -20,8 +20,8 @@ export default function Checkout({ program: initialProgram, coupon: initialCoupo
     return (
       <div className="stack">
         <h2 style={{ margin: 0 }}>Log in or sign up to enroll</h2>
-        <p className="muted" style={{ margin: 0 }}>It takes a minute: enter your mobile number, type the code we send, and you’re in. Your course then appears under My courses.</p>
-        <Link className="btn blue lg" href={`/login?next=${encodeURIComponent(back)}`}>Continue with mobile or email</Link>
+        <p className="muted" style={{ margin: 0 }}>It takes a minute: enter your email, type the code we send, and you’re in. Your course then appears under My courses.</p>
+        <Link className="btn blue lg" href={`/login?next=${encodeURIComponent(back)}`}>Continue with email</Link>
       </div>
     );
   }
@@ -80,7 +80,7 @@ function Buy({ me, initialProgram, initialCoupon }: { me: Me; initialProgram?: s
   if (!data) return <p className="loading">Loading…</p>;
   return (
     <div className="stack">
-      <p className="fine" style={{ margin: 0 }}>Logged in as {me.phone ? `+${me.phone}` : me.email} · <Link href="/my-courses">My courses</Link></p>
+      <p className="fine" style={{ margin: 0 }}>Logged in as {me.email} · <Link href="/my-courses">My courses</Link></p>
       <label>Who is learning?
         <select value={childId} onChange={(e) => setChildId(e.target.value)}>
           {data.children.map((c: any) => <option key={c.id} value={c.id}>{c.first_name} · grade {c.grade}</option>)}
@@ -145,7 +145,7 @@ function openRazorpay(order: { razorpayOrderId: string; razorpayKeyId: string; a
         amount: order.amountPaise,
         currency: "INR",
         name: "FinFun",
-        prefill: { email: me.email ?? undefined, contact: me.phone ? `+${me.phone}` : undefined },
+        prefill: { email: me.email ?? undefined },
         theme: { color: "#2970e3" },
         handler: () => { onPaid(); resolve(); }, // the webhook confirms the payment; this just moves the buyer on
         modal: { ondismiss: () => resolve() },

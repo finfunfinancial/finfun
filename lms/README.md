@@ -6,7 +6,7 @@ The screens live in the website itself (the Next.js app one folder up), not in a
 
 | Page | Who | What |
 | --- | --- | --- |
-| `/login` | Everyone | Sign up or log in with mobile or email + a 6-digit code |
+| `/login` | Everyone | Sign up or log in with email + a 6-digit code (Supabase Auth, email only) |
 | `/enrol` | Buyers | Pick or add the child (first name + grade), coupon, pay; then the course appears in My courses |
 | `/my-courses` | Buyers | Courses they bought: pick a class time, next live class, lessons and quizzes, badges, recordings, certificate |
 | `/admin` | FinFun admins | Dashboard, courses and lessons (files, quizzes), batches and classes (Zoom, recordings, attendance, certificates), users, orders (mark offline payments paid, CSV), coupons |
@@ -16,11 +16,10 @@ One login per buyer: the child is a learner record under the buyer's account, wi
 
 Website settings (`site/.env.local`, and the website's Vercel project):
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_KEY` — production URL + publishable key. Without them `/login` shows the old page and `/admin` says "being set up".
-- `NEXT_PUBLIC_ONLINE_CHECKOUT=on` — makes `/enrol` the log-in-and-pay checkout. Leave it off until parents can receive login codes (MSG91 SMS or your own email provider in Supabase); until then the old enrol form keeps collecting leads.
+- `NEXT_PUBLIC_ONLINE_CHECKOUT=on` — makes `/enrol` the log-in-and-pay checkout. Leave it off until Supabase sends email through your own SMTP provider (the built-in mailer only reaches your own team, about 2 emails an hour); until then the old enrol form keeps collecting leads.
 
 Local test logins (after `supabase db reset`, run `node scripts/dev-users.mjs`), with the website running on http://localhost:3100:
-- Admin `admin@finfun.test` — the 6-digit code arrives in Mailpit, http://127.0.0.1:54324
-- Buyers: phone `99999 00001` or `99999 00002`, code `123456`
+- Admin `admin@finfun.test`; buyers: any email (e.g. `buyer1@finfun.test`) — every login code arrives in Mailpit, http://127.0.0.1:54324
 - Coupon `TESTFREE` enrols for free, so you can try My courses without payments
 
 First production admin: create the user in Supabase → Authentication → Users (auto-confirm), then run in the SQL Editor:
@@ -42,7 +41,7 @@ node --test supabase/functions/_shared/logic.test.ts
 `supabase start` prints the local URLs and keys. Studio (the database UI) is at http://127.0.0.1:54323.
 
 Local test logins:
-- Parent: phone `+91 99999 00001`, OTP `123456` (no SMS is sent).
+- Buyer: any email; the login code arrives in Mailpit (http://127.0.0.1:54324).
 - Coupons: `FESTIVE` (10%, placeholder) and `TESTFREE` (100%, skips payment).
 
 End-to-end check (local only): `supabase db reset && node scripts/smoke.mjs`.
@@ -55,7 +54,7 @@ supabase db push                                   # applies migrations; seed.sq
 supabase secrets set STUDENT_PIN_PEPPER=$(openssl rand -hex 32)   # once, never change it afterwards
 supabase functions deploy
 ```
-Never run `supabase config push`: `config.toml` holds local-only test OTP numbers and a dummy SMS provider. Set production Auth (phone OTP via MSG91, SMTP, site URL) in the dashboard.
+Never run `supabase config push`: `config.toml` holds local-only settings (Mailpit, no email confirmation). Set production Auth in the dashboard: Email provider on, Phone off, SMTP, email templates, site URL.
 
 ## Where things live
 | What | File |
@@ -92,6 +91,6 @@ Working: schema and RLS, parent/child accounts, student login, enrolment with co
 Waiting on keys (the code paths exist; the adapters return a polite "not switched on yet"):
 - **Razorpay** — `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`
 - **Zoom** — `ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET` (Server-to-Server OAuth app) and `ZOOM_SDK_KEY`, `ZOOM_SDK_SECRET` (Meeting SDK app)
-- **MSG91** for production parent OTP (DLT-registered), connected through Supabase Auth's Send SMS hook
+- **SMTP provider** (e.g. Resend, Zoho or Amazon SES) for login emails to parents, set in Supabase → Authentication → SMTP
 
 Next up: WhatsApp/email notifications, Zoom Meeting SDK inside the join button, attendance import from Zoom reports, impact report PDF, vernacular content switching, refunds.
