@@ -24,6 +24,7 @@ const adminNav = [
   { href: "/admin/users", label: "Users" },
   { href: "/admin/orders", label: "Orders" },
   { href: "/admin/coupons", label: "Coupons" },
+  { href: "/admin/audit", label: "Audit log" },
 ];
 
 /** Admin portal frame: its own top bar instead of the marketing header. */

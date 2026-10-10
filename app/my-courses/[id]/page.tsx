@@ -94,6 +94,8 @@ function Course() {
               );
             })}
 
+            <Skills d={d} programId={d.enrolment.program_id} />
+
             <section className="card">
               <h2>Badges</h2>
               <Badges badges={d.badges} awards={d.awards} />
@@ -143,5 +145,33 @@ function Recording({ s }: { s: any }) {
     <button className="link" style={{ textAlign: "left", textDecoration: "none", color: "var(--ink)", width: "100%" }} onClick={watch}>
       <span className="spread" style={{ width: "100%" }}><span>Class {s.number} · {when(s.starts_at)}</span><span>▶ Watch</span></span>
     </button>
+  );
+}
+
+/** The trainer's skill levels for this course (RUB-4): where the child started and where they finished. */
+function Skills({ d, programId }: { d: any; programId: string }) {
+  const scores = d.rubric.filter((r: any) => r.program_id === programId);
+  if (!scores.length) return null;
+  const level = (skillId: number, stage: string) => d.levels.find((l: any) => l.level === scores.find((r: any) => r.skill_id === skillId && r.stage === stage)?.level);
+  return (
+    <section className="card">
+      <h2>Money skills</h2>
+      <div className="table-wrap">
+        <table>
+          <thead><tr><th>Skill</th><th>At the start</th><th>At the end</th></tr></thead>
+          <tbody>
+            {d.skills.map((k: any) => (
+              <tr key={k.id}>
+                <td>{k.name}</td>
+                {["baseline", "endline"].map((stage) => {
+                  const l = level(k.id, stage);
+                  return <td key={stage}>{l ? <>{l.name} <span className="fine">· {l.label}</span></> : "—"}</td>;
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }

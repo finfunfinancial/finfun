@@ -18,7 +18,8 @@ export default function LoginForm({ fallback }: { fallback: React.ReactNode }) {
   const params = useSearchParams();
   const next = params.get("next");
   const resetting = params.get("reset") === "1"; // arrived from a "reset your password" email
-  const home = me ? (me.role === "admin" ? "/admin" : next?.startsWith("/") ? next : homeFor(me.role)) : null;
+  // Admins may only be sent on to admin pages; everyone else to `next` (e.g. back to checkout) or their home.
+  const home = me ? (me.role === "admin" ? (next?.startsWith("/admin") ? next : "/admin") : next?.startsWith("/") ? next : homeFor(me.role)) : null;
   const [mode, setMode] = useState<Mode>("login");
 
   useEffect(() => {

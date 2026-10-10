@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { useUser } from "@/lib/lms/auth";
 import { Empty, Loaded, Notice, PageHead, statusChip } from "@/components/lms/ui";
 import { clock, weekdays, when } from "@/lib/lms/format";
 import { must, supabase } from "@/lib/lms/supabase";
@@ -64,6 +65,8 @@ export default function Batch() {
                     </div>
                   ) : <Empty>No students yet. Parents pick this batch after paying.</Empty>}
                 </section>
+
+                <RubricGrid batch={d.batch} students={d.roster.map((r: any) => r.students)} />
 
                 <section className="card">
                   <h2>Classes</h2>
@@ -213,4 +216,69 @@ function IssueCertificates({ batchId, onDone }: { batchId: string; onDone: () =>
     onDone();
   });
   return <button className="btn white sm" onClick={issue} disabled={busy}>Issue certificates</button>;
+}
+
+/** Skill levels per child (RUB-1, RUB-2): Bronze / Silver / Gold at the start and end of the program. Saves on change. */
+function RubricGrid({ batch, students }: { batch: any; students: any[] }) {
+  const me = useUser();
+  const [stage, setStage] = useState<"baseline" | "endline">("baseline");
+  const { data, error, reload } = useData(async () => {
+    const [skills, levels, scores] = await Promise.all([
+      supabase.from("rubric_skills").select("*").order("id").then(must),
+      supabase.from("rubric_levels").select("*").order("level").then(must),
+      students.length
+        ? supabase.from("rubric_scores").select("student_id, skill_id, stage, level").eq("program_id", batch.program_id).in("student_id", students.map((s) => s.id)).then(must)
+        : Promise.resolve([] as any[]),
+    ]);
+    return { skills, levels, scores };
+  }, [batch.program_id, students.map((s) => s.id).join()]);
+
+  const setLevel = async (studentId: string, skillId: number, level: string) => {
+    if (!level) return; // levels are corrected by picking another one, not cleared
+    const { error } = await supabase.from("rubric_scores").upsert({
+      student_id: studentId, program_id: batch.program_id, skill_id: skillId, stage, level: Number(level), assessor_id: me.id, recorded_at: new Date().toISOString(),
+    });
+    if (error) return alert(error.message);
+    reload();
+  };
+
+  return (
+    <section className="card">
+      <div className="spread">
+        <h2 style={{ margin: 0 }}>Skills (rubric)</h2>
+        <div className="tabs" style={{ width: 280, margin: 0 }}>
+          <button aria-pressed={stage === "baseline"} onClick={() => setStage("baseline")}>At the start</button>
+          <button aria-pressed={stage === "endline"} onClick={() => setStage("endline")}>At the end</button>
+        </div>
+      </div>
+      <p className="fine">Pick each child’s level per skill; it saves straight away. Parents see these on their course page.</p>
+      <Loaded data={data} error={error}>
+        {(d) => students.length ? (
+          <div className="table-wrap">
+            <table>
+              <thead><tr><th>Student</th>{d.skills.map((k: any) => <th key={k.id}>{k.name}</th>)}</tr></thead>
+              <tbody>
+                {students.map((st) => (
+                  <tr key={st.id}>
+                    <td><strong>{st.first_name}</strong></td>
+                    {d.skills.map((k: any) => {
+                      const cur = d.scores.find((x: any) => x.student_id === st.id && x.skill_id === k.id && x.stage === stage);
+                      return (
+                        <td key={k.id}>
+                          <select value={cur?.level ?? ""} onChange={(e) => setLevel(st.id, k.id, e.target.value)} aria-label={`${st.first_name}: ${k.name}`} style={{ minHeight: 34 }}>
+                            <option value="">—</option>
+                            {d.levels.map((l: any) => <option key={l.level} value={l.level}>{l.name}</option>)}
+                          </select>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : <Empty>No students yet.</Empty>}
+      </Loaded>
+    </section>
+  );
 }

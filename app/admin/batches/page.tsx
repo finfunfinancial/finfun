@@ -30,6 +30,7 @@ export default function Batches() {
         {(d) => (
           <>
             <NewBatch {...d} onCreated={reload} />
+            <Holidays />
             {d.batches.length ? (
               <div className="table-wrap">
                 <table>
@@ -103,6 +104,54 @@ function NewBatch({ programs, onCreated }: { programs: any[]; onCreated: () => v
           <Notice kind="error">{error}</Notice>
           <div className="row end"><button className="btn" disabled={busy}>{busy ? "Creating…" : "Create batch"}</button></div>
         </form>
+      </div>
+    </details>
+  );
+}
+
+/** Days with no class (BAT-2). New batches skip them when their calendar is built; existing classes can be cancelled on the batch page. */
+function Holidays() {
+  const { data, error, reload } = useData(() =>
+    supabase.from("holidays").select("*").gte("day", istToday()).order("day").then(must), []);
+  const { busy, error: addError, run } = useAction();
+  const add = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const f = new FormData(form);
+    run(async () => {
+      must(await supabase.from("holidays").upsert({ day: f.get("day"), name: String(f.get("name")).trim() }));
+      form.reset();
+      reload();
+    });
+  };
+  const remove = async (day: string) => {
+    const { error } = await supabase.from("holidays").delete().eq("day", day);
+    if (error) alert(error.message);
+    reload();
+  };
+  return (
+    <details className="panel">
+      <summary>Holidays (no class){data?.length ? ` · ${data.length} coming up` : ""}</summary>
+      <div className="stack">
+        <p className="fine" style={{ margin: 0 }}>New batches skip these days. For a batch that already exists, cancel that day’s class on its page.</p>
+        <Loaded data={data} error={error}>
+          {(days) => days.length ? (
+            <ul className="stack" style={{ listStyle: "none", padding: 0, margin: 0, gap: 6 }}>
+              {days.map((h: any) => (
+                <li key={h.day} className="spread">
+                  <span><strong>{day(h.day)}</strong> · {h.name}</span>
+                  <button className="btn danger sm" onClick={() => remove(h.day)}>Remove</button>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="muted" style={{ margin: 0 }}>No upcoming holidays.</p>}
+        </Loaded>
+        <form className="row" onSubmit={add}>
+          <input name="day" type="date" required aria-label="Holiday date" style={{ width: 180 }} />
+          <input name="name" placeholder="e.g. Diwali" required aria-label="Holiday name" style={{ width: 220 }} />
+          <button className="btn white" disabled={busy}>Add holiday</button>
+        </form>
+        <Notice kind="error">{addError}</Notice>
       </div>
     </details>
   );
