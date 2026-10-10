@@ -16,7 +16,7 @@ export default function Toolkit() {
       <PageHero eyebrow="FinFun Toolkit" title={<>Money skills you can <span className="mark">play</span></>} art="/a/sticker/12-money-fun.webp" tone="bg-pink"
         lead="Games, journals and activity sheets that keep children learning money at home and in class." />
 
-      <section className="section" aria-labelledby="ll-h">
+      <section className="section" aria-labelledby="ll-h" id="lucky-ledger">
         <div className="wrap">
           <div className="card highlight-banner featured-tool">
             <Img src={featured.img} alt="" sizes="160px" loading="lazy" style={{ width: 140 }} />
@@ -29,7 +29,7 @@ export default function Toolkit() {
         </div>
       </section>
 
-      <section className="section bg-white" aria-labelledby="kit-h">
+      <section className="section bg-white" aria-labelledby="kit-h" id="kit">
         <div className="wrap">
           <SectionHead eyebrow="In the toolkit" title={<span id="kit-h">Board games, card games and more</span>}>
             Every FinFun course includes a learning kit, so practice carries on between classes.

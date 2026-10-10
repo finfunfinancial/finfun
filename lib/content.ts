@@ -21,14 +21,8 @@ export const site = {
 // TODO(FinFun): set the real discount (e.g. "20%") and coupon code.
 export const festiveOffer = { active: true, discount: "", code: "FESTIVE" };
 
-// Courses first (the main thing people come for); Gifting and Blog live under Resources and the footer.
+// Plain header links; the Courses, Solutions and Resources dropdowns (navMenus) sit after `programs` below.
 export const nav = [
-  { href: "/programs", label: "Courses" },
-  { href: "/parents", label: "Parents" },
-  { href: "/schools", label: "Schools" },
-  { href: "/teachers", label: "Teachers" },
-  { href: "/partners", label: "Partners" },
-  { href: "/resources", label: "Resources" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Help" },
 ];
@@ -230,6 +224,64 @@ export const programs: Program[] = [
 ];
 
 export const getProgram = (slug: string) => programs.find((p) => p.slug === slug);
+
+// Header menu: Courses, Solutions and Resources open dropdowns; the rest are plain links.
+// Every href points at a page (or section) that exists — add new pages here once they're live.
+export type NavLink = { label: string; href: string; text?: string; tag?: string };
+export type NavMenu = { label: string; groups: { title?: string; links: NavLink[] }[]; more: NavLink };
+
+export const navMenus: NavMenu[] = [
+  {
+    label: "Courses",
+    groups: [
+      {
+        title: "Courses by grade",
+        links: programs.map((p) => ({ label: p.name, tag: p.grades, text: p.focus, href: `/programs/${p.slug}` })),
+      },
+      {
+        title: "Learning tools",
+        links: [
+          { label: "Lucky Ledger 2.0", tag: "New", text: "FinFun’s money game, new and improved.", href: "/toolkit#lucky-ledger" },
+          { label: "FinFun Toolkit", text: "Board games, card games and activity sheets.", href: "/toolkit#kit" },
+          { label: "Finance Journal", text: "Track pocket money, goals and savings.", href: "/toolkit#kit" },
+          { label: "Investing & Entrepreneurship", text: "Market games and planning a small stall.", href: "/resources#activities" },
+        ],
+      },
+    ],
+    more: { label: "Compare all courses", href: "/programs" },
+  },
+  {
+    label: "Solutions",
+    groups: [
+      {
+        links: [
+          { label: "For Parents", text: "Financial literacy support and activities for families.", href: "/parents" },
+          { label: "For Teachers", text: "Teacher training and classroom resources.", href: "/teachers" },
+          { label: "For Schools", text: "Curriculum integration and school partnerships.", href: "/schools" },
+          { label: "For NGOs & Communities", text: "Community financial education initiatives.", href: "/partners" },
+          { label: "For Government & CSR", text: "Large-scale financial literacy partnerships.", href: "/partners#enquire" },
+        ],
+      },
+    ],
+    more: { label: "Partner with FinFun", href: "/partners#enquire" },
+  },
+  {
+    label: "Resources",
+    groups: [
+      {
+        links: [
+          { label: "Blogs", text: "Financial literacy articles and money guides.", href: "/blog" },
+          { label: "Train-the-Trainer", text: "Training path for educators and facilitators.", href: "/teachers#trainer" },
+          { label: "FinFun Fest", text: "Events, competitions and money challenges.", href: "/fest" },
+          { label: "Evaluation Resources", text: "Rubrics and learning-outcome measurement.", href: "/teachers#rubric" },
+          { label: "Parent Assist", text: "Teaching children about money at home.", href: "/parents#assist" },
+          { label: "Wellness Centre", text: "Healthy financial habits and well-being.", href: "/wellbeing" },
+        ],
+      },
+    ],
+    more: { label: "All resources", href: "/resources" },
+  },
+];
 
 /** The course for a school grade (3–10), read from each program's "Grades a–b" label. */
 export const programForGrade = (grade: number) =>

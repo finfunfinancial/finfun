@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useSyncExternalStore } from "react";
-import { nav, site } from "@/lib/content";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { nav, navMenus, site, type NavMenu } from "@/lib/content";
 import Logo from "./Logo";
 
 // Logged in? Supabase keeps the session in localStorage as "sb-<project>-auth-token"; reading the key avoids
@@ -11,22 +11,115 @@ import Logo from "./Logo";
 const subscribe = (onChange: () => void) => (window.addEventListener("storage", onChange), () => window.removeEventListener("storage", onChange));
 const hasSession = () => Object.keys(localStorage).some((k) => k.startsWith("sb-") && k.endsWith("-auth-token"));
 
+const onPage = (path: string, href: string) => {
+  const base = href.split("#")[0];
+  return path === base || path.startsWith(`${base}/`);
+};
+const menuId = (m: NavMenu) => `nav-${m.label.toLowerCase()}`;
+// A page can sit in two menus (e.g. /teachers); highlight only the first one.
+const menuFor = (path: string) => navMenus.find((m) => [...m.groups.flatMap((g) => g.links), m.more].some((l) => onPage(path, l.href)))?.label;
+
 export default function Header() {
   const loggedIn = useSyncExternalStore(subscribe, hasSession, () => false);
   const [open, setOpen] = useState(false);
+  const [menu, setMenu] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
   const path = usePathname();
+  const activeMenu = menuFor(path);
+
+  // While a dropdown is open: a click outside the menu, tabbing out of it (the item's onBlur) or Escape closes it;
+  // Escape returns focus to its button.
+  useEffect(() => {
+    if (!menu) return;
+    const onPointer = (e: PointerEvent) => !navRef.current?.contains(e.target as Node) && setMenu(null);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      navRef.current?.querySelector<HTMLButtonElement>(`[aria-controls="nav-${menu.toLowerCase()}"]`)?.focus();
+      setMenu(null);
+    };
+    document.addEventListener("pointerdown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menu]);
+
+  // Down arrow on a menu button opens it and moves to the first link.
+  const onTriggerKey = (e: React.KeyboardEvent, m: NavMenu) => {
+    if (e.key !== "ArrowDown") return;
+    e.preventDefault();
+    setMenu(m.label);
+    requestAnimationFrame(() => document.querySelector<HTMLAnchorElement>(`#${menuId(m)} a`)?.focus());
+  };
 
   return (
-    <header className={`header${open ? " open" : ""}`} onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
+    <header
+      className={`header${open ? " open" : ""}`}
+      onClick={(e) => (e.target as HTMLElement).closest("a") && (setOpen(false), setMenu(null))}
+    >
       <div className="wrap header-inner">
         <Logo />
         <button className="menu-btn" aria-expanded={open} aria-controls="main-nav" onClick={() => setOpen(!open)}>
           <span />
           <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
         </button>
-        <nav id="main-nav" className="nav" aria-label="Main">
+        <nav
+          id="main-nav"
+          className="nav"
+          aria-label="Main"
+          ref={navRef}
+        >
+          {navMenus.map((m) => {
+            const isOpen = menu === m.label;
+            return (
+              <div
+                className="nav-item"
+                key={m.label}
+                onBlur={(e) => e.relatedTarget && !e.currentTarget.contains(e.relatedTarget) && setMenu((cur) => (cur === m.label ? null : cur))}
+              >
+                <button
+                  type="button"
+                  className="nav-trigger"
+                  aria-expanded={isOpen}
+                  aria-controls={menuId(m)}
+                  data-active={m.label === activeMenu || undefined}
+                  onClick={() => setMenu(isOpen ? null : m.label)}
+                  onKeyDown={(e) => onTriggerKey(e, m)}
+                >
+                  {m.label}
+                  <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1.5 1.5 6 6l4.5-4.5" /></svg>
+                </button>
+                <div id={menuId(m)} className={`nav-panel${m.groups.length > 1 ? " wide" : ""}`} data-open={isOpen || undefined}>
+                  <div className="nav-groups">
+                    {m.groups.map((g, i) => (
+                      <div className="nav-group" key={g.title ?? i}>
+                        {g.title && <p className="nav-group-title">{g.title}</p>}
+                        <ul aria-label={g.title}>
+                          {g.links.map((l) => (
+                            <li key={l.label}>
+                              <Link className="nav-link" href={l.href} aria-current={l.href === path ? "page" : undefined}>
+                                <span className="nav-link-label">
+                                  {l.label}
+                                  {l.tag && <span className="nav-tag">{l.tag}</span>}
+                                </span>
+                                {l.text && <span className="nav-link-text">{l.text}</span>}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                  <Link className="nav-more" href={m.more.href}>
+                    {m.more.label} <span aria-hidden="true">→</span>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} aria-current={path.startsWith(n.href) ? "page" : undefined}>
+            <Link key={n.href} className="nav-top" href={n.href} aria-current={path.startsWith(n.href) ? "page" : undefined}>
               {n.label}
             </Link>
           ))}

@@ -344,7 +344,7 @@ export function WaysToJoin() {
 
 export function Rubric() {
   return (
-    <section className="section" aria-labelledby="rubric-h">
+    <section className="section" aria-labelledby="rubric-h" id="rubric">
       <div className="wrap">
         <SectionHead eyebrow="How we measure" title={<span id="rubric-h">A rubric built for children</span>}>
           Every child is assessed on four money skills through games and challenges. Teachers mark each skill at one of three levels, and your school gets a class-wide report.
