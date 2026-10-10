@@ -13,7 +13,7 @@ export default function Dashboard() {
   const { data, error } = useData(async () => {
     const today = istToday();
     const weekAhead = new Date(Date.now() + 7 * 86400e3).toISOString();
-    const [newToday, unpaid, waitlisted, active, paid, sessions, batches, recent] = await Promise.all([
+    const [newToday, unpaid, waitlisted, active, paid, sessions, batches, recent, messages] = await Promise.all([
       count(enrolments().gte("created_at", istMidnight(today))),
       count(enrolments().eq("status", "pending")),
       count(enrolments().eq("status", "waitlisted")),
@@ -24,11 +24,12 @@ export default function Dashboard() {
       supabase.from("batches").select("id, name, seat_limit, enrolments(count)").eq("status", "open").eq("enrolments.status", "active").then(must),
       supabase.from("enrolments").select("id, status, created_at, students(first_name, username), programs(name)")
         .order("created_at", { ascending: false }).limit(8).then(must),
+      count(supabase.from("contact_requests").select("id", { count: "exact", head: true }).eq("status", "new")),
     ]);
     const revenue = paid.reduce((sum: number, o: { amount_paise: number }) => sum + o.amount_paise, 0);
     const full = batches.filter((b: any) => (b.enrolments[0]?.count ?? 0) >= b.seat_limit * 0.8);
     const needsWork = sessions.filter((s: any) => !s.has_zoom);
-    return { newToday, unpaid, waitlisted, active, revenue, full, sessions, needsWork, recent };
+    return { newToday, unpaid, waitlisted, active, revenue, full, sessions, needsWork, recent, messages };
   });
 
   return (
@@ -44,6 +45,7 @@ export default function Dashboard() {
               <Stat label="Unpaid enrollments" value={<Link href="/admin/orders">{d.unpaid}</Link>} warn={d.unpaid > 0} />
               <Stat label="Waitlisted" value={<Link href="/admin/waitlist">{d.waitlisted}</Link>} warn={d.waitlisted > 0} />
               <Stat label="Batches 80%+ full" value={d.full.length} warn={d.full.length > 0} />
+              <Stat label="New contact requests" value={<Link href="/admin/contacts">{d.messages}</Link>} warn={d.messages > 0} />
             </div>
 
             <div className="split">

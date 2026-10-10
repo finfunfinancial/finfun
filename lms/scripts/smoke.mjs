@@ -126,4 +126,17 @@ r = await rpc("mark_order_paid", { p_order: enrolmentId, p_payment_id: "x" });
 assert.notEqual(r.status, 200);
 step("logged-out visitors see no children and can't mark orders paid");
 
+// Contact form: anyone can send a message; only admins can read them.
+r = await call("/rest/v1/contact_requests", { body: { name: "Asha", email: "asha@example.com", topic: "parent", message: "When do batches start?" } });
+assert.equal(r.status, 201, JSON.stringify(r.data));
+r = await call("/rest/v1/contact_requests", { body: { name: "Bot", email: "not-an-email", message: "hi" } });
+assert.notEqual(r.status, 201, "a bad email must be refused");
+r = await call("/rest/v1/contact_requests", { body: { name: "X", email: "x@example.com", message: "hi", status: "contacted" } });
+assert.notEqual(r.status, 201, "visitors can't send a message already marked contacted");
+r = await call("/rest/v1/contact_requests?select=id");
+assert.deepEqual(r.data, []);
+r = await call("/rest/v1/contact_requests?select=id", { token: buyer });
+assert.deepEqual(r.data, []);
+step("contact form: anyone can send a message, only admins can read them");
+
 console.log("\nAll smoke checks passed.");

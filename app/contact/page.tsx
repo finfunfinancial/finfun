@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ContactForm from "@/components/lms/ContactForm";
 import { PageHero } from "@/components/Sections";
 import { site } from "@/lib/content";
 
@@ -10,8 +11,17 @@ export const metadata: Metadata = {
 
 export default function Contact() {
   return (
-    <PageHero eyebrow="Contact" title={<>Let’s <span className="mark">talk money</span></>} art="/a/sticker/10-hi-im-rupi.webp" tone="bg-sky"
-      lead={<>Email <a href={`mailto:${site.email}`}>{site.email}</a>, call <a href={`tel:${site.phone.replace(/\s/g, "")}`}>{site.phone}</a>, or use the WhatsApp button any time.</>}
-    />
+    <>
+      <PageHero eyebrow="Contact" title={<>Let’s <span className="mark">talk money</span></>} art="/a/sticker/10-hi-im-rupi.webp" tone="bg-sky"
+        lead={<>Email <a href={`mailto:${site.email}`}>{site.email}</a>, call <a href={`tel:${site.phone.replace(/\s/g, "")}`}>{site.phone}</a>, use the WhatsApp button, or send us a message below.</>}
+      />
+      <section className="section" aria-label="Contact form">
+        <div className="wrap" style={{ maxWidth: 760 }}>
+          <div className="portal">
+            <ContactForm />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

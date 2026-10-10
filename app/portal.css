@@ -229,3 +229,8 @@
 .portal.admin .stat { text-align: left; align-items: flex-start; }
 .portal.admin .stat-label { text-transform: none; font-size: 0.88rem; font-weight: 600; }
 @media (max-width: 900px) { .portal.admin .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.portal.admin .side-link .count { margin-left: auto; min-width: 24px; padding: 1px 8px; border-radius: 999px; background: #e5484d; color: #fff; font-size: 0.78rem; font-weight: 800; text-align: center; }
+.portal.admin .side-link[aria-current="page"] .count { background: #fff; color: var(--a-accent); }
+.portal.admin .admin-frame { grid-template-columns: 276px minmax(0, 1fr); }
+.portal.admin .side-link span:not(.count) { white-space: nowrap; }
+@media (max-width: 900px) { .portal.admin .admin-frame { grid-template-columns: 1fr; } }

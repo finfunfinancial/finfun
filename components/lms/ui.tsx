@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Gate, lmsReady, useUser } from "@/lib/lms/auth";
 import { supabase } from "@/lib/lms/supabase";
+import { useData } from "@/lib/lms/use-data";
 import { Icon } from "./icons";
 
 /** Scopes the portal styles (app/portal.css) and covers deployments where accounts aren't switched on yet. */
@@ -28,6 +30,7 @@ const adminNav = [
   { href: "/admin/sessions", label: "Live Sessions", icon: "live" },
   { href: "/admin/orders", label: "Orders", icon: "orders" },
   { href: "/admin/coupons", label: "Coupons", icon: "coupons" },
+  { href: "/admin/contacts", label: "Contact requests", icon: "contacts" },
   { href: "/admin/users", label: "Users", icon: "users" },
   { href: "/admin/audit", label: "Audit log", icon: "audit" },
 ] as const;
@@ -68,6 +71,15 @@ function Sidebar() {
     router.replace("/login");
   };
   const name = me.full_name || me.email?.split("@")[0] || "Admin";
+  // New contact-form messages, shown as a count next to "Contact requests"; refreshed when the page changes.
+  const { data: newMessages, reload: recount } = useData(
+    () => supabase.from("contact_requests").select("id", { count: "exact", head: true }).eq("status", "new").then((r) => r.count ?? 0),
+    [path],
+  );
+  useEffect(() => {
+    window.addEventListener("contacts-changed", recount);
+    return () => window.removeEventListener("contacts-changed", recount);
+  }, [recount]);
   return (
     <aside className="sidebar">
       <Link href="/admin" className="sidebar-logo">
@@ -80,6 +92,7 @@ function Sidebar() {
             <Link key={n.href} href={n.href} className="side-link" aria-current={active ? "page" : undefined}>
               <Icon name={n.icon} />
               <span>{n.label}</span>
+              {n.href === "/admin/contacts" && !!newMessages && <span className="count" aria-label={`${newMessages} new`}>{newMessages}</span>}
             </Link>
           );
         })}
