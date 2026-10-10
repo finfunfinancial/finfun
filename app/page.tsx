@@ -32,9 +32,6 @@ export default function Home() {
               <Link className="btn btn-blue btn-lg" href="/programs" data-track="path_courses">
                 Find a course
               </Link>
-              <Link className="btn btn-lg" href="/try" data-track="path_trial">
-                Try it free
-              </Link>
               {festiveOffer.active && (
                 <Link className="btn btn-lg btn-festive" href={`/enrol?coupon=${festiveOffer.code}`} data-track="festive_click">
                   🎉 Festive offer{festiveOffer.discount && `: ${festiveOffer.discount} off`}
