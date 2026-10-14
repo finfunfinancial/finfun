@@ -63,42 +63,41 @@ export const partnerTypes = [
   { title: "Government", text: "Integrate FinFun into state school programs, as with Telangana’s life skills book.", href: "/partners#enquire", cta: "Talk to us" },
 ];
 
+// Homepage art (public/a/redesign) comes from the UI/UX redesign; `tone` is the soft colour behind each item.
+const r = (name: string) => `/a/redesign/${name}.webp`;
+
 export const impact = [
-  { value: "35,000+", label: "Schools", icon: "/a/icons/impact-schools.webp" },
-  { value: "20,00,000+", label: "Students", icon: "/a/icons/impact-students.webp" },
-  { value: "500+", label: "Hours of training", icon: "/a/icons/impact-hours-of-training.webp" },
-  { value: "350+", label: "Teachers trained", icon: "/a/icons/impact-teachers-trained.webp" },
+  { value: "35,000+", label: "Schools", art: r("impact-schools"), tone: "sky" },
+  { value: "20,00,000+", label: "Students", art: r("impact-students"), tone: "yellow" },
+  { value: "500+", label: "Hours of training", art: r("impact-hours"), tone: "green" },
+  { value: "350+", label: "Teachers trained", art: r("impact-teachers"), tone: "pink" },
 ];
 
+// Why FinFun, How it works and Four ways teens learn are drawn as one path: each item's art is a slice of it.
 export const values = [
-  {
-    title: "Early Confidence",
-    text: "Teens handle UPI, pocket money and online shopping now. We build money confidence before the big decisions arrive.",
-    icon: "/a/icons/value-early-confidence.webp",
-  },
-  {
-    title: "Lifelong Habits",
-    text: "Save first, budget smart, grow steadily — habits practised in class that stick for life.",
-    icon: "/a/icons/value-lifelong-habits.webp",
-  },
-  {
-    title: "Practical Skills",
-    text: "Real topics: scams, SIPs, bank accounts, side hustles. No boring theory — skills they use the same week.",
-    icon: "/a/icons/value-practical-skills.webp",
-  },
+  { title: "Early Confidence", text: "Handle pocket money and digital payments.", art: r("why-1"), tone: "sky" },
+  { title: "Lifelong Habits", text: "Save first, budget smart, grow steadily.", art: r("why-2"), tone: "pink" },
+  { title: "Practical Skills", text: "Real topics: UPI, banks, investing, side hustles.", art: r("why-3"), tone: "green" },
 ];
 
 export const howItWorks = [
-  { title: "Learn", text: "Short, story-led lessons on one real money topic at a time.", img: "/a/sticker/07-money-coach.webp" },
-  { title: "Play", text: "Games, quizzes, role-play and challenges put every idea into action.", img: "/a/sticker/12-money-fun.webp" },
-  { title: "Grow", text: "Badges, leaderboards and real savings goals keep teens coming back.", img: "/a/sticker/02-money-grows.webp" },
+  { title: "Learn", text: "Short, story-led lessons on real life money topics.", art: r("how-1"), tone: "sky" },
+  { title: "Play", text: "Games, quizzes, role-play and challenges.", art: r("how-2"), tone: "yellow" },
+  { title: "Grow", text: "Badges, real savings goals and lifelong habits.", art: r("how-3"), tone: "green" },
 ];
 
 export const methods = [
-  { title: "Mind Mapping", text: "Connect earn, save, spend and share into one big picture.", img: "/a/home-page/method-mind-mapping.webp" },
-  { title: "Theatre", text: "Act out the shop, the bank and the scam call — and learn by doing.", img: "/a/home-page/method-theatre.webp" },
-  { title: "Quiz", text: "Fast rounds on needs vs wants, UPI safety and compounding.", img: "/a/home-page/method-quiz.webp" },
-  { title: "Story Writing", text: "Teens write their own money goals and future plans.", img: "/a/home-page/method-story-writing.webp" },
+  { title: "Mind Mapping", text: "Connect earn, save, spend and share into one big picture.", art: r("methods-1"), tone: "sky" },
+  { title: "Theatre", text: "Act out the shop, the bank and the scam call — and learn by doing.", art: r("methods-2"), tone: "pink" },
+  { title: "Quiz", text: "Fast rounds on needs vs wants, UPI safety and compounding.", art: r("methods-3"), tone: "yellow" },
+  { title: "Story Writing", text: "Teens write their own money goals and future plans.", art: r("methods-4"), tone: "green" },
+];
+
+// Student outcomes: before, with and after FinFun.
+export const outcomes = [
+  { tag: "Before FinFun", tone: "pink", art: r("outcome-before"), good: false, points: ["Confused about money", "No clear goals", "Spends without thinking", "Unsure about the future"] },
+  { tag: "With FinFun", tone: "sky", art: r("outcome-with"), good: true, points: ["Learns through stories & games", "Builds smart money habits", "Understands real-life choices", "Practices with fun activities"] },
+  { tag: "After FinFun", tone: "green", art: r("outcome-after"), good: true, points: ["More confident with money", "Makes better choices", "Sets and works towards goals", "Ready for a brighter future"] },
 ];
 
 export const journey = [
@@ -405,21 +404,11 @@ export const testimonials: Testimonial[] = [
 
 // TODO(FinFun): swap for logo files (with permission).
 export const partners = [
-  { name: "Government of Telangana", note: "Dept. of School Education" },
-  { name: "Bengaluru Airport", note: "CSR partner" },
-  { name: "Australian Consulate", note: "with KIAF" },
-  { name: "Madurai Corporation", note: "School pilot" },
-  { name: "Prakruti Shala", note: "Sir CV Raman House" },
-];
-
-// TODO(FinFun): replace with real classroom photos (grades 6–10, with written consent).
-export const classroom = [
-  { caption: "Scam-spotting challenge", sticker: "/a/sticker/09-scam-alert.webp", bg: "var(--pink-soft)" },
-  { caption: "UPI role-play", sticker: "/a/sticker/09-pin-secret.webp", bg: "var(--sky-soft)" },
-  { caption: "Budget battle", sticker: "/a/sticker/03-budget-boss.webp", bg: "var(--yellow-soft)" },
-  { caption: "Money quiz finals", sticker: "/a/sticker/12-money-fun.webp", bg: "var(--green-soft)" },
-  { caption: "Investing 101", sticker: "/a/sticker/02-own-a-slice.webp", bg: "var(--lavender-soft)" },
-  { caption: "Goal-setting letters", sticker: "/a/sticker/04-goal-set.webp", bg: "var(--pink-soft)" },
+  { name: "Government of Telangana", note: "Dept. of School Education", art: r("trusted-1") },
+  { name: "Bengaluru Airport", note: "CSR partner", art: r("trusted-2") },
+  { name: "Australian Consulate", note: "with KIAF", art: r("trusted-3") },
+  { name: "Madurai Corporation", note: "School pilot", art: r("trusted-4") },
+  { name: "Prakruti Shala", note: "Sir CV Raman House", art: r("trusted-5") },
 ];
 
 export const parentFaq = [
@@ -462,20 +451,19 @@ export const spotlight = {
   avatar: "/a/testimonials-and-team/avatar-csr-professional.webp",
 };
 
+// Typical money lesson vs a FinFun session ("Same goal. A better path.").
 export const comparison = {
-  rows: [
-    { aspect: "Focus", old: "Memorising definitions", fun: "Using money in real situations" },
-    { aspect: "Method", old: "Lectures and textbooks", fun: "Games, role-play, quizzes and stories" },
-    { aspect: "Student role", old: "Listen and copy notes", fun: "Play, compete and decide" },
-    { aspect: "Topics", old: "Abstract theory", fun: "UPI, scams, SIPs, side hustles" },
-    { aspect: "Result", old: "Forgotten after the exam", fun: "Habits — and real savings" },
-    { aspect: "Measured by", old: "Nothing", fun: "Rubric evaluation and an impact report" },
+  typical: ["Lectures & textbooks", "Abstract theory", "Forgotten after the exam"],
+  finfun: [
+    { text: "Games & real-life stories", icon: r("diff-games") },
+    { text: "UPI, scams, SIPs, side hustles", icon: r("diff-rupee") },
+    { text: "Habits and real savings", icon: r("diff-habits") },
   ],
 };
 
 export const waysToJoin = [
-  { kicker: "Schools", title: "Partner School", who: "For principals & trustees", text: "Run FinFun in grades 6–10 with trained teachers, kits and competitions.", cta: "Book a demo", href: "/schools#partner", color: "sky" },
-  { kicker: "CSR & Government", title: "Impact Partner", who: "For CSR heads & education departments", text: "Fund FinFun at scale and get measured outcomes in an impact report.", cta: "Get the report", href: "/schools#report", color: "lavender" },
-  { kicker: "Teachers", title: "FinFun Teacher", who: "For teachers in partner schools", text: "Get trained to lead sessions — plus personal finance training for you.", cta: "Ask about training", href: "/contact", color: "green" },
-  { kicker: "Parents", title: "FinFun Family", who: "For parents of grades 3–10", text: "Enroll your child in Basic, Pro or Advantage — live, online, game-based.", cta: "Enroll your child", href: "/enrol", color: "pink" },
+  { kicker: "Schools", title: "Partner School", who: "For principals & trustees", cta: "Book a demo", href: "/schools#partner", color: "sky", art: r("join-1") },
+  { kicker: "CSR & Government", title: "Impact Partner", who: "For CSR heads & education departments", cta: "Get the report", href: "/schools#report", color: "yellow", art: r("join-2") },
+  { kicker: "Teachers", title: "FinFun Teacher", who: "For teachers in partner schools", cta: "Ask about training", href: "/contact", color: "green", art: r("join-3") },
+  { kicker: "Parents", title: "FinFun Family", who: "For parents of grades 3–10", cta: "Enroll your child", href: "/enrol", color: "pink", art: r("join-4") },
 ];

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Img from "@/components/Img";
-import { CTA, Classroom, Comparison, ImpactBand, JoinBanner, JsonLd, Partners, ProgramCard, SectionCta, SectionHead, Spotlight, WaysToJoin } from "@/components/Sections";
+import { CTA, Classroom, Comparison, ImpactBand, JoinBanner, JsonLd, Outcomes, Partners, PathRow, ProgramCard, SectionCta, SectionHead, Spotlight, WaysToJoin } from "@/components/Sections";
 import PostCard from "@/components/PostCard";
 import Testimonials from "@/components/Testimonials";
-import { festiveOffer, howItWorks, methods, programs, rubricLevels, site, spotlight, values } from "@/lib/content";
+import { festiveOffer, howItWorks, methods, programs, site, values } from "@/lib/content";
 import { posts } from "@/lib/posts";
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
           slogan: site.tagline,
         }}
       />
-      <section className="hero doodle">
+      <section className="hero">
         <div className="wrap hero-grid">
           <div>
             <span className="eyebrow">{site.grades} · Ages 8–16</span>
@@ -30,7 +30,7 @@ export default function Home() {
             <p className="lead">Children build lifelong money habits — budgeting, saving, staying safe online and investing — through games, quizzes and challenges they actually enjoy.</p>
             <div className="btn-row">
               <Link className="btn btn-blue btn-lg" href="/programs" data-track="path_courses">
-                Find a course
+                Find a course <span aria-hidden="true">→</span>
               </Link>
               {festiveOffer.active && (
                 <Link className="btn btn-lg btn-festive" href={`/enrol?coupon=${festiveOffer.code}`} data-track="festive_click">
@@ -40,30 +40,23 @@ export default function Home() {
             </div>
             <p className="hero-note">Trusted by 35,000+ schools across India · <Link href="/schools">For schools</Link></p>
           </div>
-          <div className="bento">
-            <div className="bento-tile bento-main">
-              <Img src="/a/sticker/10-hi-im-rupi.webp" alt="Rupi, the FinFun coin mascot" priority sizes="(max-width: 860px) 60vw, 320px" />
-            </div>
-            <div className="bento-tile">
-              <Img src="/a/sticker/02-scam-spotter.webp" alt="Scam Spotter sticker" priority sizes="(max-width: 860px) 30vw, 160px" />
-            </div>
-            <div className="bento-tile">
-              <Img src="/a/sticker/01-sip-every-month.webp" alt="SIP every month sticker" priority sizes="(max-width: 860px) 30vw, 160px" />
-            </div>
-            <ul className="bento-chips" aria-label="Topics teens learn">
-              {["UPI safety", "Budgeting", "Saving goals", "SIPs", "Scam alerts"].map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-          </div>
+          <Img
+            className="art hero-art"
+            src="/a/redesign/hero.webp"
+            alt="A child at a sign saying Today, thinking about smart choices, at the start of a path past signs for Save, Learn, Invest and Grow towards a sun labelled Brighter money tomorrows"
+            priority
+            sizes="(max-width: 860px) 90vw, 540px"
+          />
         </div>
       </section>
 
       <ImpactBand />
 
       <section className="section" aria-labelledby="t-h">
-        <div className="wrap">
-          <SectionHead eyebrow="Testimonials" title={<span id="t-h">What schools, officials and parents say</span>} />
+        <div className="wrap quotes-stage">
+          <SectionHead eyebrow="Testimonials" title={<span id="t-h">What schools, officials and parents <span className="mark">say</span></span>} />
+          <Img className="art quotes-fig l" src="/a/redesign/quote-official.webp" alt="" sizes="160px" loading="lazy" />
+          <Img className="art quotes-fig r" src="/a/redesign/quote-parent.webp" alt="" sizes="160px" loading="lazy" />
           <Testimonials />
         </div>
       </section>
@@ -72,16 +65,8 @@ export default function Home() {
 
       <section className="section" aria-labelledby="why-h">
         <div className="wrap">
-          <SectionHead eyebrow="Why FinFun" title={<span id="why-h">Skills school doesn’t teach, but life does</span>} />
-          <div className="grid g3">
-            {values.map((v) => (
-              <div className="card icon-card" key={v.title}>
-                <Img src={v.icon} alt="" sizes="120px" loading="lazy" />
-                <h3>{v.title}</h3>
-                <p>{v.text}</p>
-              </div>
-            ))}
-          </div>
+          <SectionHead eyebrow="Why FinFun" title={<span id="why-h">Skills school doesn’t teach,<br />but <span className="mark">life does</span></span>} />
+          <PathRow items={values} />
           <SectionCta links={[CTA.programs, CTA.partner]} />
         </div>
       </section>
@@ -90,35 +75,16 @@ export default function Home() {
 
       <section className="section" aria-labelledby="how-h">
         <div className="wrap">
-          <SectionHead eyebrow="How it works" title={<span id="how-h">Learn&nbsp;→ Play&nbsp;→ Grow</span>} />
-          <div className="steps">
-            {howItWorks.map((s, i) => (
-              <div className="card step" key={s.title}>
-                <span className="step-num">{i + 1}</span>
-                <Img src={s.img} alt="" sizes="130px" loading="lazy" />
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
-              </div>
-            ))}
-          </div>
+          <SectionHead eyebrow="How it works" title={<span id="how-h">Small steps.<br /><span className="mark">Big money habits.</span></span>} />
+          <PathRow items={howItWorks} />
           <SectionCta links={[CTA.enrol, CTA.demo]} />
         </div>
       </section>
 
-      <section className="section bg-white" aria-labelledby="methods-h">
+      <section className="section" aria-labelledby="methods-h">
         <div className="wrap">
-          <SectionHead eyebrow="Gamified learning" title={<span id="methods-h">Four ways teens learn with FinFun</span>} />
-          <div className="grid g4">
-            {methods.map((m) => (
-              <div className="card method" key={m.title}>
-                <Img src={m.img} alt="" sizes="(max-width: 800px) 90vw, 280px" loading="lazy" />
-                <div>
-                  <h3>{m.title}</h3>
-                  <p>{m.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <SectionHead eyebrow="Gamified learning" title={<span id="methods-h">Four ways teens <span className="mark">learn</span> with FinFun</span>} />
+          <PathRow items={methods} />
           <SectionCta links={[CTA.demo, CTA.programs, { ...CTA.report, tone: "white" }]} />
         </div>
       </section>
@@ -144,43 +110,21 @@ export default function Home() {
 
       <section className="section" aria-labelledby="out-h">
         <div className="wrap">
-          <SectionHead eyebrow="Student outcomes" title={<span id="out-h">Confidence you can measure</span>}>
-            Every child is assessed on four money skills, from Bronze to Gold — and the habits show up at home.
+          <SectionHead eyebrow="Student outcomes" title={<span id="out-h">From confusion to <span className="mark">confidence</span></span>}>
+            Practical money skills, better habits and a confident outlook for life.
           </SectionHead>
-          <div className="grid g3">
-            <div className="card stack">
-              <h3>Skills, assessed</h3>
-              <ol className="rubric-levels" aria-label="Levels" style={{ margin: 0 }}>
-                {rubricLevels.map((l) => (
-                  <li key={l.name}>
-                    <Img src={l.medal} alt="" sizes="40px" loading="lazy" />
-                    <strong>{l.name}</strong> {l.label}
-                  </li>
-                ))}
-              </ol>
-              <p style={{ margin: 0 }}>Money basics · Saving & goals · Smart spending · Staying safe</p>
-            </div>
-            <div className="card stack">
-              <h3>Habits that stick</h3>
-              <p className="spotlight-head" style={{ margin: 0 }}>“{spotlight.headline}”</p>
-              <p className="fine" style={{ margin: 0 }}>{spotlight.name}, {spotlight.role}</p>
-            </div>
-            <figure className="card stack" style={{ margin: 0 }}>
-              <h3>Mind maps by students</h3>
-              <Img src="/a/home-page/method-mind-mapping.webp" alt="Children connecting earn, save, spend and share in a mind map" sizes="(max-width: 800px) 90vw, 360px" loading="lazy" />
-              {/* TODO(FinFun): replace with photos of real student mind maps (with parent consent). */}
-              <figcaption className="fine">Children connect earning, saving, spending and sharing into one big picture.</figcaption>
-            </figure>
-          </div>
+          <Outcomes />
           <SectionCta links={[CTA.impact, CTA.partner]} />
         </div>
       </section>
 
       <Partners />
 
-      <section className="section bg-white" aria-labelledby="blog-h">
+      <section className="section" aria-labelledby="blog-h">
         <div className="wrap">
-          <SectionHead eyebrow="From the blog" title={<span id="blog-h">Money tips teens actually read</span>} />
+          <SectionHead eyebrow="From the blog" title={<span id="blog-h">Money tips teens <span className="mark">actually read</span></span>}>
+            Simple, practical and real stories — written for curious teens.
+          </SectionHead>
           <div className="grid g3">
             {posts.slice(0, 3).map((p) => (
               <PostCard key={p.slug} p={p} />

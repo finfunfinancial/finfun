@@ -1,7 +1,7 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
-import { classroom, comparison, impact, joinSteps, partners, rubric, rubricLevels, spotlight, waysToJoin, type Program } from "@/lib/content";
-import { Arrow, Dots, ScribbleCircle, Spark } from "./Doodles";
+import type { CSSProperties, ReactNode } from "react";
+import { comparison, impact, joinSteps, outcomes, partners, rubric, rubricLevels, spotlight, waysToJoin, type Program } from "@/lib/content";
+import { Dots, ScribbleCircle } from "./Doodles";
 import Img from "./Img";
 
 export type CtaLink = { label: string; href: string; tone?: "blue" | "yellow" | "white" };
@@ -57,38 +57,18 @@ export function PageHero({ eyebrow, title, lead, art, artAlt = "", children, ton
   );
 }
 
-export function ImpactBand({ title = "Our impact so far", cta = [{ ...CTA.impact, tone: "yellow" }] }: { title?: string; cta?: CtaLink[] | null }) {
+export function ImpactBand({ title = <>Our <span className="mark">impact</span> so far</>, cta = [{ ...CTA.impact, tone: "yellow" }] }: { title?: ReactNode; cta?: CtaLink[] | null }) {
   return (
-    <section className="impact section tight" aria-labelledby="impact-h">
+    <section className="section tight" aria-labelledby="impact-h">
       <div className="wrap">
-        <h2 id="impact-h">{title}</h2>
-        <div className="grid g4">
+        <SectionHead title={<span id="impact-h">{title}</span>} />
+        <ul className="impact-row" role="list">
           {impact.map((s) => (
-            <div className="stat" key={s.label}>
-              <Img src={s.icon} alt="" sizes="76px" />
-              <strong>{s.value}</strong>
-              <span>{s.label}</span>
-            </div>
-          ))}
-        </div>
-        {cta && <SectionCta links={cta} />}
-      </div>
-    </section>
-  );
-}
-
-export function Partners({ cta = [CTA.partner] }: { cta?: CtaLink[] | null } = {}) {
-  return (
-    <section className="section tight bg-white" aria-labelledby="partners-h">
-      <div className="wrap">
-        <SectionHead title={<span id="partners-h">Trusted by schools, parents, government and CSR leaders</span>} />
-        <ul className="partners" role="list" style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {partners.map((p) => (
-            <li className="partner" key={p.name}>
-              <span className="logo-coin" aria-hidden="true">★</span>
-              <span>
-                {p.name}
-                <small>{p.note}</small>
+            <li key={s.label}>
+              <Img className="art" src={s.art} alt="" sizes="160px" loading="lazy" />
+              <span className={`impact-pill tone-${s.tone}`}>
+                <strong>{s.value}</strong>
+                <span>{s.label}</span>
               </span>
             </li>
           ))}
@@ -99,21 +79,47 @@ export function Partners({ cta = [CTA.partner] }: { cta?: CtaLink[] | null } = {
   );
 }
 
-export function Classroom({ cta = [CTA.demo, CTA.enrol] }: { cta?: CtaLink[] | null } = {}) {
+export function Partners({ cta = [CTA.partner] }: { cta?: CtaLink[] | null } = {}) {
+  return (
+    <section className="section tight" aria-labelledby="partners-h">
+      <div className="wrap">
+        <SectionHead title={<span id="partners-h"><span className="mark">Trusted</span> by schools, parents, government and CSR leaders</span>} />
+        <ul className="partner-cards" role="list">
+          {partners.map((p) => (
+            <li className="partner-card" key={p.name}>
+              <Img className="art" src={p.art} alt="" sizes="(max-width: 600px) 50vw, 210px" loading="lazy" />
+              <div>
+                <span className="logo-coin" aria-hidden="true">★</span>
+                <span>
+                  {p.name}
+                  <small>{p.note}</small>
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+        {cta && <SectionCta links={cta} />}
+      </div>
+    </section>
+  );
+}
+
+export function Classroom({ cta = [{ ...CTA.demo, tone: "white" }, { ...CTA.enrol, tone: "yellow" }] }: { cta?: CtaLink[] | null } = {}) {
   return (
     <section className="section" aria-labelledby="class-h">
       <div className="wrap">
-        <SectionHead eyebrow="Inside the classroom" title={<span id="class-h">This is what learning money looks like</span>} />
-        <div className="polaroids">
-          {classroom.map((c) => (
-            <figure className="polaroid" key={c.caption}>
-              <div className="ph" style={{ background: c.bg }}>
-                <Img src={c.sticker} alt="" sizes="220px" loading="lazy" />
-              </div>
-              <figcaption>{c.caption}</figcaption>
-            </figure>
-          ))}
-        </div>
+        <SectionHead eyebrow="Inside the classroom" title={<span id="class-h">This is what <span className="mark">learning money</span> looks like</span>}>
+          Real topics. Real skills. Real life. Explained simply for curious teens.
+        </SectionHead>
+      </div>
+      <div className="classroom-desk">
+        <Img
+          className="art"
+          src="/a/redesign/classroom-banner.webp"
+          alt="Notes pinned above a desk: Spot scams, Stay safe online, Budget like a pro, Set goals and save, Explore investing — beside books labelled Spend, Save, Grow and a notebook titled Money Skills for Real Life"
+          sizes="(max-width: 1200px) 100vw, 1160px"
+          loading="lazy"
+        />
         {cta && <SectionCta links={cta} />}
       </div>
     </section>
@@ -257,16 +263,26 @@ export function JsonLd({ data }: { data: object }) {
 }
 
 export function Spotlight({ cta = [CTA.partner, CTA.report] }: { cta?: CtaLink[] | null } = {}) {
+  const [lead, amount] = spotlight.headline.split(/(?=₹)/); // highlight the rupee amount
   return (
     <section className="section tight" aria-label="Featured testimonial">
       <div className="wrap">
         <figure className="spotlight">
-          <Img src={spotlight.avatar} alt="" sizes="120px" loading="lazy" />
+          <Img className="art" src="/a/redesign/spotlight-saver.webp" alt="" sizes="200px" loading="lazy" />
           <div>
-            <p className="spotlight-head">“{spotlight.headline}”</p>
+            <p className="spotlight-head">
+              <span className="q" aria-hidden="true">“</span>
+              {lead}
+              {amount && <span className="mark">{amount}</span>}
+              <span className="q" aria-hidden="true">”</span>
+            </p>
             <blockquote>{spotlight.quote}</blockquote>
             <figcaption>
-              <strong>{spotlight.name}</strong> · {spotlight.role}
+              <Img src={spotlight.avatar} alt="" sizes="48px" loading="lazy" />
+              <span>
+                <strong>{spotlight.name}</strong>
+                {spotlight.role}
+              </span>
             </figcaption>
           </div>
         </figure>
@@ -278,42 +294,33 @@ export function Spotlight({ cta = [CTA.partner, CTA.report] }: { cta?: CtaLink[]
 
 export function Comparison({ cta = [CTA.demo, CTA.enrol] }: { cta?: CtaLink[] | null } = {}) {
   return (
-    <section className="section bg-white" aria-labelledby="cmp-h">
+    <section className="section" aria-labelledby="cmp-h">
       <div className="wrap">
-        <div className="sk-head">
-          <span className="eyebrow">Why it works</span>
-          <h2 id="cmp-h">
-            <Spark className="sk-spark l" />
-            <span className="sk-big">Difference</span>
-            <Spark className="sk-spark r" />
-            <span className="sk-between">between a typical money lesson and FinFun</span>
-          </h2>
-          <div className="sk-labels" aria-hidden="true">
-            <div className="sk-label">
-              <Img src="/a/sticker/06-rupi-thinks.webp" alt="" sizes="90px" loading="lazy" />
-              <span className="sk-tag">Typical lesson</span>
-            </div>
-            <Arrow className="sk-arrow l" />
-            <Arrow className="sk-arrow r" />
-            <div className="sk-label fun">
-              <span className="sk-tag">FinFun session</span>
-              <Img src="/a/sticker/05-rupi-approves.webp" alt="" sizes="120px" loading="lazy" />
+        <SectionHead eyebrow="Why it works" title={<span id="cmp-h">Same goal.<br />A <span className="mark">better path</span>.</span>} />
+        <div className="better-path">
+          <div className="bp-side">
+            <Img className="art" src="/a/redesign/diff-typical.webp" alt="" sizes="180px" loading="lazy" />
+            <div>
+              <h3>Typical money lesson</h3>
+              <ul className="bp-list" role="list">
+                {comparison.typical.map((t) => <li key={t}>{t}</li>)}
+              </ul>
             </div>
           </div>
-        </div>
-        <div className="sketch-table" role="table" aria-label="Typical money lesson compared with FinFun">
-          <div className="st-row st-head" role="row">
-            <span role="columnheader">Aspect</span>
-            <span role="columnheader">Typical lesson</span>
-            <span role="columnheader">FinFun</span>
-          </div>
-          {comparison.rows.map((r) => (
-            <div className="st-row" role="row" key={r.aspect}>
-              <span role="rowheader">{r.aspect}</span>
-              <span role="cell" className="st-old">{r.old}</span>
-              <span role="cell" className="st-fun">{r.fun}</span>
+          <div className="bp-side fun">
+            <Img className="art" src="/a/redesign/diff-finfun.webp" alt="" sizes="240px" loading="lazy" />
+            <div>
+              <h3>FinFun session</h3>
+              <ul className="bp-list" role="list">
+                {comparison.finfun.map((f) => (
+                  <li key={f.text}>
+                    <Img className="art" src={f.icon} alt="" sizes="40px" loading="lazy" />
+                    {f.text}
+                  </li>
+                ))}
+              </ul>
             </div>
-          ))}
+          </div>
         </div>
         {cta && <SectionCta links={cta} />}
       </div>
@@ -321,18 +328,50 @@ export function Comparison({ cta = [CTA.demo, CTA.enrol] }: { cta?: CtaLink[] | 
   );
 }
 
+/** Figures walking along one hand-drawn path (each item's art is a slice of it), with a coloured label and line below. */
+export function PathRow({ items }: { items: { title: string; text: string; art: string; tone: string }[] }) {
+  return (
+    <ul className="path-row" role="list" style={{ "--n": items.length } as CSSProperties}>
+      {items.map((it) => (
+        <li key={it.title}>
+          <Img className="art" src={it.art} alt="" sizes="(max-width: 700px) 90vw, 330px" loading="lazy" />
+          <h3 className={`tag tone-${it.tone}`}>{it.title}</h3>
+          <p>{it.text}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Student outcomes: before, with and after FinFun. */
+export function Outcomes() {
+  return (
+    <div className="grid g3">
+      {outcomes.map((o) => (
+        <div className="card outcome" key={o.tag}>
+          <h3 className={`tag tone-${o.tone}`}>{o.tag}</h3>
+          <Img className="art" src={o.art} alt="" sizes="240px" loading="lazy" />
+          <ul className={`checks${o.good ? "" : " bad"}`} role="list">
+            {o.points.map((pt) => <li key={pt}>{pt}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function WaysToJoin() {
   return (
-    <section className="section bg-yellow doodle" aria-labelledby="join-h">
+    <section className="section" aria-labelledby="join-h">
       <div className="wrap">
-        <SectionHead eyebrow="Get involved" title={<span id="join-h">Four ways to join FinFun</span>} />
+        <SectionHead eyebrow="Get involved" title={<span id="join-h">Four ways to <span className="mark">join FinFun</span></span>} />
         <div className="grid g4">
           {waysToJoin.map((w) => (
-            <div className={`card way way-${w.color}`} key={w.title}>
-              <span className="way-kicker">{w.kicker}</span>
+            <div className="card way" key={w.title}>
+              <Img className="art" src={w.art} alt="" sizes="220px" loading="lazy" />
+              <span className={`tag tone-${w.color}`}>{w.kicker}</span>
               <h3>{w.title}</h3>
-              <p className="way-who">{w.who}</p>
-              <p>{w.text}</p>
+              <p>{w.who}</p>
               <Link className="btn btn-sm" href={w.href}>{w.cta}</Link>
             </div>
           ))}

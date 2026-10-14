@@ -9,6 +9,7 @@ export type Post = {
   category: Category;
   date: string;
   cover: string;
+  art?: string; // card illustration from the redesign; the cover is used when there isn't one
   body: Block[];
 };
 
@@ -21,6 +22,7 @@ export const posts: Post[] = [
     category: "Parents",
     date: "2026-09-18",
     cover: "/a/blog-covers/blog-5-keep-kids-safe-online.webp",
+    art: "/a/redesign/blog-upi.webp",
     body: [
       { p: "Most teens will use UPI before they turn 16. That’s great for independence — and it makes them a target. These are the five scams we see most often in FinFun classrooms." },
       { h: "1. The “you won a prize” message", p: "A message says you’ve won ₹10,000 and asks you to click a link or scan a code to claim it. Real prizes never ask you to pay or scan anything." },
@@ -38,6 +40,7 @@ export const posts: Post[] = [
     category: "Money basics",
     date: "2026-09-10",
     cover: "/a/blog-covers/blog-1-what-is-a-budget.webp",
+    art: "/a/redesign/blog-budget.webp",
     body: [
       { p: "A budget isn’t a punishment. It’s a plan that tells your money where to go — instead of wondering where it went." },
       { h: "The 50-30-20 rule", list: ["50% for needs — travel, school supplies, phone recharge.", "30% for wants — snacks, games, outings.", "20% for savings — your goals and emergencies."] },
@@ -52,6 +55,7 @@ export const posts: Post[] = [
     category: "Money basics",
     date: "2026-08-28",
     cover: "/a/blog-covers/blog-2-needs-vs-wants.webp",
+    art: "/a/redesign/blog-needs.webp",
     body: [
       { p: "A need is something you can’t do without. A want makes life nicer. Both are fine — the trick is knowing which is which before you pay." },
       { h: "The 24-hour rule", p: "For any want over ₹500, wait a day. If you still want it tomorrow, buy it happily. Most impulse buys don’t survive the wait." },
