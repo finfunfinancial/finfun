@@ -148,26 +148,19 @@ export function JoinBanner({ title = "Ready to become money smart?", text = "Bri
             )}
           </div>
         </div>
-        <LetsLockup />
+        <Img
+          className="art cta-art"
+          src="/a/redesign/cta-steps.webp"
+          alt="A child climbing steps labelled Learn, Practice and Grow towards a sun that says Brighter money tomorrows"
+          sizes="(max-width: 760px) 70vw, 340px"
+          loading="lazy"
+        />
       </div>
     </section>
   );
 }
 
 /** Rupi the coin mascot with a hand-lettered “let’s get money smart”. */
-export function LetsLockup({ small }: { small?: boolean }) {
-  return (
-    <div className={`lockup${small ? " small" : ""}`} aria-hidden="true">
-      <div className="lockup-art">
-        <Img className="sticker" src="/a/sticker/10-hi-im-rupi.webp" alt="" sizes="220px" loading="lazy" />
-      </div>
-      <p className="lockup-word">
-        <span className="lets">let’s</span> <span className="loud">GET MONEY SMART</span>
-      </p>
-    </div>
-  );
-}
-
 export const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
 
 /** A price with the ₹ sign given more weight than the amount, and the unit spelled out: “₹1,499 per child”. */

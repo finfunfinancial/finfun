@@ -1382,43 +1382,18 @@ p {
   position: relative;
 }
 
-.lockup {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: clamp(20px, 3vw, 36px);
-}
-.lockup-art {
-  position: relative;
-  width: clamp(140px, 17vw, 210px);
-  flex: none;
-}
-.lockup-word {
-  margin: 0 0 18px;
-  line-height: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.lets {
-  font-family: var(--font-hand), cursive;
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
-}
-.loud {
-  font-family: var(--font-caps), cursive;
-  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
-  color: var(--tomato);
-  -webkit-text-stroke: 1.5px var(--ink);
-  paint-order: stroke fill;
-  max-width: 7ch;
-  line-height: 0.95;
+.cta-art {
+  width: 100%;
+  max-width: 340px;
+  justify-self: center;
 }
 @media (max-width: 760px) {
   .cta-grid {
     grid-template-columns: 1fr;
   }
-  .lockup {
+  .cta-art {
     order: -1;
+    max-width: 240px;
   }
 }
 
